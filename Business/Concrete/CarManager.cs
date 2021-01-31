@@ -28,5 +28,10 @@ namespace Business.Concrete
         public Car GetById(int id) => _carDal.GetById(id);
 
         public void Update(Car car) => _carDal.Update(car);
+
+        public bool GetCarsByBrandId(List<Car> lists)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

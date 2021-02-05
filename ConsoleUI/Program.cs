@@ -28,25 +28,25 @@ namespace ConsoleUI
             Console.WriteLine("---------------- CAR LIST ----------------");
             foreach (var item in carManager.GetAll())
             {
-                Console.WriteLine("{0} - {1} - {2} - {3} - {4} - {5}", item.Id, item.BrandId, item.ColorId, item.ModelYear, item.DailyPrice, item.Description);
+                Console.WriteLine("{0} - {1} - {2} - {3} - {4} - {5}", item.Id, brandManager.GetById(item.BrandId).BrandName, colorManager.GetById(item.ColorId).ColorName, item.ModelYear, item.DailyPrice, item.Description);
             }
 
             Console.WriteLine("\n---------------- CAR BY BRAND ID ----------------");
             foreach (var item in carManager.GetAllByBrandId(1))
             {
-                Console.WriteLine("{0} - {1} - {2} - {3} - {4} - {5}", item.Id, item.BrandId, item.ColorId, item.ModelYear, item.DailyPrice, item.Description);
+                Console.WriteLine("{0} - {1} - {2} - {3} - {4} - {5}", item.Id, brandManager.GetById(item.BrandId).BrandName, colorManager.GetById(item.ColorId).ColorName, item.ModelYear, item.DailyPrice, item.Description);
             }
 
             Console.WriteLine("\n---------------- CAR BY COLOR ID ----------------");
             foreach (var item in carManager.GetAllByColorId(1))
             {
-                Console.WriteLine("{0} - {1} - {2} - {3} - {4} - {5}", item.Id, item.BrandId, item.ColorId, item.ModelYear, item.DailyPrice, item.Description);
+                Console.WriteLine("{0} - {1} - {2} - {3} - {4} - {5}", item.Id, brandManager.GetById(item.BrandId).BrandName, colorManager.GetById(item.ColorId).ColorName, item.ModelYear, item.DailyPrice, item.Description);
             }
 
             Console.WriteLine("\n---------------- CAR BY MODEL YEAR (min, max) ----------------");
             foreach (var item in carManager.GetAllByModelYear(2000,2020))
             {
-                Console.WriteLine("{0} - {1} - {2} - {3} - {4} - {5}", item.Id, item.BrandId, item.ColorId, item.ModelYear, item.DailyPrice, item.Description);
+                Console.WriteLine("{0} - {1} - {2} - {3} - {4} - {5}", item.Id, brandManager.GetById(item.BrandId).BrandName, colorManager.GetById(item.ColorId).ColorName, item.ModelYear, item.DailyPrice, item.Description);
             }
 
         }

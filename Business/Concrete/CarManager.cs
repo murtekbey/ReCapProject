@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 
@@ -53,6 +54,16 @@ namespace Business.Concrete
         public List<Car> GetAllByModelYear(int min, int max)
         {
             return _carDal.GetAll(p => p.ModelYear >= min && p.ModelYear <= max);
+        }
+
+        public Car GetById(int carId)
+        {
+            return _carDal.Get(c => c.Id == carId);
+        }
+
+        public List<CarDetailDto> GetCarDetails()
+        {
+            return _carDal.GetCarDetails();
         }
 
         public void Update(Car car)

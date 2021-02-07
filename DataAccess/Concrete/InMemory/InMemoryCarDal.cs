@@ -1,5 +1,6 @@
 ﻿using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,15 +28,10 @@ namespace DataAccess.Concrete.InMemory
             _cars.Add(car);
         }
 
-        public void Delete(int id)
-        {
-            Car carToDelete = _cars.SingleOrDefault(c => c.Id == id);
-            _cars.Remove(carToDelete);
-        }
-
         public void Delete(Car entity)
         {
-            throw new NotImplementedException();
+            Car carToDelete = _cars.SingleOrDefault(c => c.Id == entity.Id);
+            _cars.Remove(carToDelete);
         }
 
         public Car Get(Expression<Func<Car, bool>> filter)
@@ -56,6 +52,11 @@ namespace DataAccess.Concrete.InMemory
         public Car GetById(int id)
         {
            return _cars.SingleOrDefault(c => c.Id == id);
+        }
+
+        public List<CarDetailDto> GetCarDetails()
+        {
+            throw new NotImplementedException();
         }
 
         public void Update(Car car)

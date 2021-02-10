@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
@@ -16,60 +18,86 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-        public void Add(Car car) 
+        public IResult Add(Car car) 
         {
-            if (car.DailyPrice > 0)
+            if (car.DailyPrice <= 0)
             {
-                _carDal.Add(car);
-                Console.WriteLine("{0} id numaralı araç eklendi.", car.Id);
+                return new ErrorResult(Messages.CarPriceInvalid);
             }
-            else
-            {
-                Console.WriteLine("Günlük fiyat tutarı 0'dan büyük olmalıdır.");
-            }
+            _carDal.Add(car);
+
+            return new SuccessResult(Messages.CarAdded);
 
         }
 
-        public void Delete(Car car)
+        public IResult Delete(Car car)
         {
             _carDal.Delete(car);
-            Console.WriteLine("{0} id numaralı araç silindi.", car.Id);
+            return new SuccessResult(Messages.CarDeleted);
         }
 
-        public List<Car> GetAll()
+        public IDataResult<List<Car>> GetAll()
         {
-            return _carDal.GetAll();
+            if (DateTime.Now.Hour == 00)
+            {
+                return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
+            }
+
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarListed);
         }
 
-        public List<Car> GetAllByBrandId(int id)
+        public IDataResult<List<Car>> GetAllByBrandId(int id)
         {
-            return _carDal.GetAll(p => p.BrandId == id);
+            if (DateTime.Now.Hour == 00)
+            {
+                return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
+            }
+
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(p => p.BrandId == id), Messages.CarListed);
         }
 
-        public List<Car> GetAllByColorId(int id)
+        public IDataResult<List<Car>> GetAllByColorId(int id)
         {
-            return _carDal.GetAll(p => p.ColorId == id);
+            if (DateTime.Now.Hour == 00)
+            {
+                return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
+            }
+
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(p => p.ColorId == id), Messages.CarListed);
         }
 
-        public List<Car> GetAllByModelYear(int min, int max)
+        public IDataResult<List<Car>> GetAllByModelYear(int min, int max)
         {
-            return _carDal.GetAll(p => p.ModelYear >= min && p.ModelYear <= max);
+            if (DateTime.Now.Hour == 00)
+            {
+                return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
+            }
+
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(p => p.ModelYear >= min && p.ModelYear <= max), Messages.CarListed);
         }
 
-        public Car GetById(int carId)
+        public IDataResult<Car> GetById(int carId)
         {
-            return _carDal.Get(c => c.Id == carId);
+            if (DateTime.Now.Hour == 00)
+            {
+                return new ErrorDataResult<Car>(Messages.MaintenanceTime);
+            }
+            return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == carId));
         }
 
-        public List<CarDetailDto> GetCarDetails()
+        public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
-            return _carDal.GetCarDetails();
+            if (DateTime.Now.Hour == 01)
+            {
+                return new ErrorDataResult<List<CarDetailDto>>(Messages.MaintenanceTime);
+            }
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails());
         }
 
-        public void Update(Car car)
+        public IResult Update(Car car)
         {
             _carDal.Update(car);
-            Console.WriteLine("{0} id numaralı araç bilgileri güncellendi.", car.Id);
+            return new SuccessResult(Messages.CarUpdated);
         }
             
             

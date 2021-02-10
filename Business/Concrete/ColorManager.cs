@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
@@ -15,40 +17,46 @@ namespace Business.Concrete
             _colorDal = colorDal;
         }
 
-        public void Add(Color color)
+        public IResult Add(Color color)
         {
-            if (color.ColorName.Length > 2)
+            if (color.ColorName.Length <= 2)
             {
-                _colorDal.Add(color);
-                Console.WriteLine("{0} isimli renk başarılı bir şekilde eklendi.", color.ColorName);
+                return new ErrorResult(Messages.ColorNameInvalid);
             }
-            else
-            {
-                Console.WriteLine("Girdiğiniz renk ismi 2 karakterden büyük olmalıdır.");
-            }
+            _colorDal.Add(color);
+            return new SuccessResult(Messages.ColorAdded);
 
         }
 
-        public void Delete(Color color)
+        public IResult Delete(Color color)
         {
             _colorDal.Delete(color);
-            Console.WriteLine("{0} isimli renk başarılı bir şekilde silindi.", color.ColorName);
+            return new SuccessResult(Messages.ColorDeleted);
         }
 
-        public List<Color> GetAll()
+        public IDataResult<List<Color>> GetAll()
         {
-            return _colorDal.GetAll();
+            if (DateTime.Now.Hour == 00)
+            {
+                return new ErrorDataResult<List<Color>>(Messages.MaintenanceTime);
+            }
+
+            return new SuccessDataResult<List<Color>>(_colorDal.GetAll(), Messages.ColorListed);
         }
 
-        public Color GetById(int id)
+        public IDataResult<Color> GetById(int id)
         {
-            return _colorDal.Get(c => c.ColorId == id);
+            if (DateTime.Now.Hour == 00)
+            {
+                return new ErrorDataResult<Color>(Messages.MaintenanceTime);
+            }
+            return new SuccessDataResult<Color>(_colorDal.Get(c => c.ColorId == id));
         }
 
-        public void Update(Color color)
+        public IResult Update(Color color)
         {
             _colorDal.Update(color);
-            Console.WriteLine("{0} isimli renk başarılı bir şekilde güncellendi.", color.ColorName);
+            return new SuccessResult(Messages.ColorUpdated);
         }
     }
 }

@@ -11,21 +11,74 @@ namespace ConsoleUI
         static void Main(string[] args)
         {
             //CarTest();
-
             //BrandTest();
-
             //ColorTest();
-
             //AddColorTest();
-
             //DeleteColorTest();
-
             //UpdateColorTest();
-
             //CarByModelYearTest();
+            //CarDtoTest();
 
-            CarDtoTest();
 
+            //UserManager userManager = AddUserTest();
+            //AddCustomerTest();
+
+            //AddRentalTest();
+
+            //DeliverCarTest(3);
+        }
+
+        private static void DeliverCarTest(int id)
+        {
+            RentalManager rentalManager = new RentalManager(new EfRentalDal());
+            var result = rentalManager.DeliverCar(id);
+
+            if (result.Success)
+            {
+                Console.WriteLine(result.Message);
+            }
+            else
+            {
+                Console.WriteLine(result.Message);
+            }
+        }
+
+        private static void AddRentalTest()
+        {
+            RentalManager rentalManager = new RentalManager(new EfRentalDal());
+            CarManager carManager = new CarManager(new EfCarDal());
+            CustomerManager customerManager = new CustomerManager(new EfCustomerDal());
+
+            var result = rentalManager.RentACar(new Rental
+            {
+                Id = 3,
+                CarId = carManager.GetById(2).Data.Id,
+                CustomerId = customerManager.GetById(1).Data.Id,
+                RentDate = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"))
+            });
+
+            if (result.Success)
+            {
+                Console.WriteLine(result.Message);
+            }
+            else
+            {
+                Console.WriteLine(result.Message);
+            }
+        }
+
+        private static void AddCustomerTest()
+        {
+            UserManager userManager = new UserManager(new EfUserDal());
+            CustomerManager customerManager = new CustomerManager(new EfCustomerDal());
+            customerManager.Add(new Customer { UserId = userManager.GetById(1).Data.Id, CompanyName = "Muboys Adi Ortaklığı" });
+        }
+
+        private static UserManager AddUserTest()
+        {
+            UserManager userManager = new UserManager(new EfUserDal());
+            userManager.Add(new User { FirstName = "Murat", LastName = "Altınpınar", Email = "email@email.com", Password = "1234" });
+            return userManager;
         }
 
         private static void CarByModelYearTest()

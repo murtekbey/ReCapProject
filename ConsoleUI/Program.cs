@@ -23,9 +23,9 @@ namespace ConsoleUI
             //UserManager userManager = AddUserTest();
             //AddCustomerTest();
 
-            //AddRentalTest();
+            AddRentalTest();
 
-            DeliverCarTest(1003);
+            //DeliverCarTest(1003);
         }
 
         private static void DeliverCarTest(int id)
@@ -49,20 +49,33 @@ namespace ConsoleUI
             CarManager carManager = new CarManager(new EfCarDal());
             CustomerManager customerManager = new CustomerManager(new EfCustomerDal());
 
-            var result = rentalManager.Add(new Rental
-            {
-                CarId = carManager.GetById(3).Data.Id,
-                CustomerId = customerManager.GetById(1).Data.Id,
-                RentDate = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"))
-            });
+            var car = carManager.GetById(3);
+            var customer = customerManager.GetById(1);
 
-            if (result.Success)
+            if (car.Data == null)
             {
-                Console.WriteLine(result.Message);
+                Console.WriteLine("Araç sistemde bulunamadı.");
+            }
+            else if (customer.Data == null)
+            {
+                Console.WriteLine("Müşteri sistemde bulunamadı.");
             }
             else
             {
-                Console.WriteLine(result.Message);
+                var result = rentalManager.Add(new Rental
+                {
+                    CarId = car.Data.Id,
+                    CustomerId = customer.Data.Id,
+                    RentDate = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"))
+                });
+                if (result.Success)
+                {
+                    Console.WriteLine(result.Message);
+                }
+                else
+                {
+                    Console.WriteLine(result.Message);
+                }
             }
         }
 

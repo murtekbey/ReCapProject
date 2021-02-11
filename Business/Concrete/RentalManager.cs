@@ -5,6 +5,7 @@ using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Business.Concrete
@@ -30,23 +31,18 @@ namespace Business.Concrete
             return new SuccessResult(Messages.RentalDeleted);
         }
 
-        public IResult DeliverCar(int rentalId)
+        public IResult DeliverCar(int id)
         {
-            var rentalCar = _rentalDal.Get(b => b.Id == rentalId);
+            var rentalCar = _rentalDal.GetAll(r => r.CarId == id);
+            var updatedRental = rentalCar.LastOrDefault();
 
-            if (rentalCar.ReturnDate != DateTime.MinValue)
+            if (updatedRental.ReturnDate != DateTime.MinValue)
             {
                 return new ErrorResult(Messages.CarDeliveredBefore);
             }
-            _rentalDal.Update(new Rental
-            {
-                Id = rentalCar.Id,
-                CarId = rentalCar.CarId,
-                CustomerId = rentalCar.CustomerId,
-                RentDate = rentalCar.RentDate,
-                ReturnDate = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"))
-            });
 
+            updatedRental.ReturnDate = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"));
+            _rentalDal.Update(updatedRental);
             return new SuccessResult(Messages.CarDelivered);
         }
 

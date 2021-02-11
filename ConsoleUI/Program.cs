@@ -23,7 +23,7 @@ namespace ConsoleUI
             //UserManager userManager = AddUserTest();
             //AddCustomerTest();
 
-            //AddRentalTest();
+            AddRentalTest();
 
             //DeliverCarTest(3);
         }
@@ -49,9 +49,8 @@ namespace ConsoleUI
             CarManager carManager = new CarManager(new EfCarDal());
             CustomerManager customerManager = new CustomerManager(new EfCustomerDal());
 
-            var result = rentalManager.RentACar(new Rental
+            var result = rentalManager.Add(new Rental
             {
-                Id = 3,
                 CarId = carManager.GetById(2).Data.Id,
                 CustomerId = customerManager.GetById(1).Data.Id,
                 RentDate = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"))

@@ -20,6 +20,13 @@ namespace Business.Concrete
 
         public IResult Add(Rental rental)
         {
+            var rentalCar = _rentalDal.Get(r => r.CarId == rental.CarId);
+
+            if (rentalCar != null && rentalCar.ReturnDate == DateTime.MinValue)
+            {
+                return new ErrorResult(Messages.NoReturnDate);
+            }
+
             _rentalDal.Add(rental);
             return new SuccessResult(Messages.RentalAdded);
         }
@@ -66,27 +73,6 @@ namespace Business.Concrete
                 return new ErrorDataResult<Rental>(Messages.MaintenanceTime);
             }
             return new SuccessDataResult<Rental>(_rentalDal.Get(b => b.Id == id));
-        }
-
-        public IResult RentACar(Rental rental)
-        {
-            var rentalCar = _rentalDal.Get(b => rental.ReturnDate == DateTime.MinValue);
-
-            if (rentalCar == null)
-            {
-                _rentalDal.Update(new Rental
-                {
-                    Id = rentalCar.Id,
-                    CarId = rentalCar.Id,
-                    CustomerId = rentalCar.CustomerId,
-                    RentDate = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd")),
-                    ReturnDate = DateTime.MinValue
-                });
-                return new SuccessResult(Messages.CarRented);
-            }
-
-            return new ErrorResult(Messages.NoReturnDate);
-
         }
 
         public IResult Update(Rental rental)

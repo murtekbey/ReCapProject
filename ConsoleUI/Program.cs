@@ -23,9 +23,9 @@ namespace ConsoleUI
             //UserManager userManager = AddUserTest();
             //AddCustomerTest();
 
-            AddRentalTest();
+            //AddRentalTest();
 
-            //DeliverCarTest(3);
+            DeliverCarTest(1003);
         }
 
         private static void DeliverCarTest(int id)
@@ -51,7 +51,7 @@ namespace ConsoleUI
 
             var result = rentalManager.Add(new Rental
             {
-                CarId = carManager.GetById(2).Data.Id,
+                CarId = carManager.GetById(3).Data.Id,
                 CustomerId = customerManager.GetById(1).Data.Id,
                 RentDate = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"))
             });

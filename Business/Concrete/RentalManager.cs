@@ -20,13 +20,6 @@ namespace Business.Concrete
 
         public IResult Add(Rental rental)
         {
-            var rentalCar = _rentalDal.Get(r => r.CarId == rental.CarId);
-
-            if (rentalCar != null && rentalCar.ReturnDate == DateTime.MinValue)
-            {
-                return new ErrorResult(Messages.NoReturnDate);
-            }
-
             _rentalDal.Add(rental);
             return new SuccessResult(Messages.RentalAdded);
         }
@@ -48,7 +41,7 @@ namespace Business.Concrete
             _rentalDal.Update(new Rental
             {
                 Id = rentalCar.Id,
-                CarId = rentalCar.Id,
+                CarId = rentalCar.CarId,
                 CustomerId = rentalCar.CustomerId,
                 RentDate = rentalCar.RentDate,
                 ReturnDate = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"))

@@ -21,3 +21,4 @@
 - [Entities](https://github.com/murtekbey/ReCapProject/tree/master/Entities)
 - [ConsoleUI](https://github.com/murtekbey/ReCapProject/tree/master/ConsoleUI)
 
+Code released under the [MIT](https://github.com/murtekbey/ReCapProject/blob/master/LICENSE) License. © 2021 Murat ALTINPINAR

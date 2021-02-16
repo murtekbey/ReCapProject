@@ -6,6 +6,7 @@ using Entities.Concrete;
 using Entities.DTOs;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace Business.Concrete
 {
@@ -46,36 +47,6 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarListed);
         }
 
-        public IDataResult<List<Car>> GetAllByBrandId(int id)
-        {
-            if (DateTime.Now.Hour == 00)
-            {
-                return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
-            }
-
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(p => p.BrandId == id), Messages.CarListed);
-        }
-
-        public IDataResult<List<Car>> GetAllByColorId(int id)
-        {
-            if (DateTime.Now.Hour == 00)
-            {
-                return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
-            }
-
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(p => p.ColorId == id), Messages.CarListed);
-        }
-
-        public IDataResult<List<Car>> GetAllByModelYear(int min, int max)
-        {
-            if (DateTime.Now.Hour == 00)
-            {
-                return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
-            }
-
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(p => p.ModelYear >= min && p.ModelYear <= max), Messages.CarListed);
-        }
-
         public IDataResult<Car> GetById(int carId)
         {
             if (DateTime.Now.Hour == 00)
@@ -85,19 +56,24 @@ namespace Business.Concrete
             return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == carId));
         }
 
-        public IDataResult<List<CarDetailDto>> GetCarDetails()
+        public IDataResult<List<CarDetailDto>> GetCarDetails(Expression<Func<Car, bool>> filter = null)
         {
             if (DateTime.Now.Hour == 01)
             {
                 return new ErrorDataResult<List<CarDetailDto>>(Messages.MaintenanceTime);
             }
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails());
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(filter));
         }
 
         public IResult Update(Car car)
         {
+            if (car.DailyPrice > 0)
+            {
+                _carDal.Update(car);
+                return new SuccessResult(Messages.CarUpdated);
+            }
             _carDal.Update(car);
-            return new SuccessResult(Messages.CarUpdated);
+            return new SuccessResult(Messages.CarPriceInvalid);
         }
             
             

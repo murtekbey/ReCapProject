@@ -2,7 +2,6 @@
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using System;
-using System.Collections.Generic;
 
 namespace ConsoleUI
 {
@@ -18,29 +17,10 @@ namespace ConsoleUI
             //UpdateColorTest();
             //CarByModelYearTest();
             //CarDtoTest();
-
-
-            //UserManager userManager = AddUserTest();
+            //AddUserTest();
             //AddCustomerTest();
+            //AddRentalTest();
 
-            AddRentalTest();
-
-            //DeliverCarTest(1003);
-        }
-
-        private static void DeliverCarTest(int id)
-        {
-            RentalManager rentalManager = new RentalManager(new EfRentalDal());
-            var result = rentalManager.DeliverCar(id);
-
-            if (result.Success)
-            {
-                Console.WriteLine(result.Message);
-            }
-            else
-            {
-                Console.WriteLine(result.Message);
-            }
         }
 
         private static void AddRentalTest()
@@ -86,31 +66,10 @@ namespace ConsoleUI
             customerManager.Add(new Customer { UserId = userManager.GetById(1).Data.Id, CompanyName = "Muboys Adi Ortaklığı" });
         }
 
-        private static UserManager AddUserTest()
+        private static void AddUserTest()
         {
             UserManager userManager = new UserManager(new EfUserDal());
             userManager.Add(new User { FirstName = "Murat", LastName = "Altınpınar", Email = "email@email.com", Password = "1234" });
-            return userManager;
-        }
-
-        private static void CarByModelYearTest()
-        {
-            CarManager carManager = new CarManager(new EfCarDal());
-            ColorManager colorManager = new ColorManager(new EfColorDal());
-            BrandManager brandManager = new BrandManager(new EfBrandDal());
-            var result = carManager.GetAllByModelYear(1990, 2020);
-
-            if (result.Success)
-            {
-                foreach (var car in result.Data)
-                {
-                    Console.WriteLine("{0} - {1} - {2} - {3} - {4} - {5}", car.Id, brandManager.GetById(car.BrandId).Data.BrandName, colorManager.GetById(car.ColorId).Data.ColorName, car.ModelYear, car.DailyPrice, car.Description);
-                }
-            } else
-            {
-                Console.WriteLine(result.Message);
-            }
-
         }
 
         private static void CarDtoTest()

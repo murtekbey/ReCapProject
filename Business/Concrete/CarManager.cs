@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -19,14 +21,10 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car) 
         {
-            if (car.DailyPrice <= 0)
-            {
-                return new ErrorResult(Messages.CarPriceInvalid);
-            }
             _carDal.Add(car);
-
             return new SuccessResult(Messages.CarAdded);
 
         }
@@ -39,7 +37,7 @@ namespace Business.Concrete
 
         public IDataResult<List<Car>> GetAll()
         {
-            if (DateTime.Now.Hour == 00)
+            if (DateTime.Now.Hour == 5)
             {
                 return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
             }
@@ -49,7 +47,7 @@ namespace Business.Concrete
 
         public IDataResult<Car> GetById(int carId)
         {
-            if (DateTime.Now.Hour == 00)
+            if (DateTime.Now.Hour == 5)
             {
                 return new ErrorDataResult<Car>(Messages.MaintenanceTime);
             }
@@ -58,7 +56,7 @@ namespace Business.Concrete
 
         public IDataResult<List<CarDetailDto>> GetCarDetails(Expression<Func<Car, bool>> filter = null)
         {
-            if (DateTime.Now.Hour == 01)
+            if (DateTime.Now.Hour == 5)
             {
                 return new ErrorDataResult<List<CarDetailDto>>(Messages.MaintenanceTime);
             }

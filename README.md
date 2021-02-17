@@ -5,6 +5,16 @@
 - *Araç kiralama operasyonlarınızı yönetebileceğiniz bir otomasyon projesidir. Modüler PnP (Tak ve Çalıştır) mimarisine uygun, SOLID prensiplerine ve temiz mimari yöntemlerine bağlı bir projedir. Hala proje üzerinde çalışmalar devam ediyor. Zaman içerisinde ilerleyecek ve nihai şeklini alacaktır*
 
 ### Latest Updates - *Son Güncellemeler*
+
+- 18 February 2021
+	- Autofac, Autofac.Extensions.DependencyInjection, Autofac.Extras.DynamicProxy are added to project. *(Autofac projeye eklendi.)*
+	- AOP and IoC container structures are now used in the project *(Artık projede AOP ve IoC yapıları kullanılıyor.)*
+	- FluentValidation is added. Validation processes will now be performed with the help of FluentValidation. *(Validation işlemleri artık FluentValidation yardımıyla gerçekleştirilecek.)*
+	- Business layer has been updated. Added attributes instead of conditions. *(Business katmanı güncellendi. Koşul döngüleri yerine attributelar eklendi.)*
+	- Codes have been refactored according to Autofac and FluentValidation. You can follow commits. *(Kodlar Autofac ve FluentValidationa göre tekrar düzenlendi. Commitlerden takip edebilirsiniz.)*
+	- Some bugs are fixed. *(Bazı hatalar düzeltildi)*
+	- Tested via [Postman](https://www.postman.com/) after refactoring. *(Yeniden düzenleme yapıldıktan sonra Postman aracılığıyla test edildi.)*
+
 - 16 February 2021
 	- WebAPI layer is added. Set WebAPI as startup project for testing *(WebAPI katmanı sisteme eklendi. Test etmek için WebAPI katmanını başlangıç projesi olarak ayarlamanız gerekiyor)*
 	- CRUD Operations is added to WebAPI/Controllers layer *(CRUD operasyonları WebAPI/Controllers katmanına eklendi)*
@@ -17,12 +27,24 @@
 ### Installation - *Kurulum*
 - [SqlQuery.sql](https://github.com/murtekbey/ReCapProject/blob/master/SQLQuery.sql) Create your table as you can see on the link. *(Tablonuzu linkde gördüğünüz şekilde oluşturun)*
 
-- The following packages must be added to the "DataAcess" layer via "NuGet". *("NuGet" aracılığıyla "DataAccess" katmanına aşağıdaki paketler eklenmelidir.)*
-	- Microsoft.EntityFrameworkCore(3.1.11)
-	- Microsoft.EntityFrameworkCore.SqlServer(3.1.11)
+- __*"Autofac v6.1.0"*__ package must be added to the following layers via "NuGet" *("NuGet" aracılığıyla "Autofac v6.1.0" paketi aşağıdaki katmanlara eklenmelidir)*
+	- [Business](https://github.com/murtekbey/ReCapProject/tree/master/Business)
+	- [Core](https://github.com/murtekbey/ReCapProject/tree/master/Core)
 
-- The following package must be added to the "Core" layer via "NuGet". *("NuGet" aracılığıyla "Core" katmanına aşağıdaki paket eklenmelidir.)*
-	- Microsoft.EntityFrameworkCore.SqlServer(3.1.11)
+- __*"Autofac.Extensions.DependencyInjection v7.1.0"*__ package must be added to the following layers via "NuGet" *("NuGet" aracılığıyla "Autofac.Extensions.DependencyInjection v7.1.0" paketi aşağıdaki katmanlara eklenmelidir)*
+	- [Core](https://github.com/murtekbey/ReCapProject/tree/master/Core)
+	- [WebAPI](https://github.com/murtekbey/ReCapProject/tree/master/WebAPI)
+
+- __*"Autofac.Extras.DynamicProxy v6.0.0"*__ package must be added to the following layers via "NuGet" *("NuGet" aracılığıyla "Autofac.Extras.DynamicProxy v6.0.0" paketi aşağıdaki katmanlara eklenmelidir)*
+	- [Business](https://github.com/murtekbey/ReCapProject/tree/master/Business)
+	- [Core](https://github.com/murtekbey/ReCapProject/tree/master/Core)
+
+- __*"Microsoft.EntityFrameworkCore v3.1.11"*__ package must be added to the following layers via "NuGet" *("NuGet" aracılığıyla "Microsoft.EntityFrameworkCore v3.1.11" paketi aşağıdaki katmanlara eklenmelidir)*
+	- [DataAccess](https://github.com/murtekbey/ReCapProject/tree/master/DataAccess)
+
+- __*"Microsoft.EntityFrameworkCore.SqlServer v3.1.11"*__ package must be added to the following layers via "NuGet" *("NuGet" aracılığıyla "Microsoft.EntityFrameworkCore.SqlServer v3.1.11" paketi aşağıdaki katmanlara eklenmelidir)*
+	- [Core](https://github.com/murtekbey/ReCapProject/tree/master/Core)
+	- [DataAccess](https://github.com/murtekbey/ReCapProject/tree/master/DataAccess)
 
 ### Layers - *Katmanlar*
 - [Business](https://github.com/murtekbey/ReCapProject/tree/master/Business)

@@ -8,6 +8,7 @@ using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -25,13 +26,16 @@ namespace Business.Concrete
         [ValidationAspect(typeof(CarImageValidator))]
         public IResult Add(CarImage carImage)
         {
-            IResult result = BusinessRules.Run(CheckIfCountOfCarImagesCorrect(carImage.CarId));
+            IResult result = BusinessRules.Run(
+                CheckIfCountOfCarImagesCorrect(carImage.CarId),
+                CheckIfFileExtensionCorrect(carImage.ImagePath),
+                AddPhotoToFolder(carImage)
+                );
 
             if (result != null)
             {
                 return result;
             }
-            ChangePhotoName(carImage);
             _carImageDal.Add(carImage);
             return new SuccessResult(Messages.CarImageAdded);
         }
@@ -100,18 +104,40 @@ namespace Business.Concrete
             if (!result)
             {
                 return new ErrorDataResult<List<CarImage>>(new List<CarImage> 
-                { new CarImage {ImagePath = "logo.png"} } 
+                { new CarImage {ImagePath = "../Images/logo.png"} } 
                 ); 
             }
-            return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll(p => p.CarId == carId));
+            return new SuccessDataResult<List<CarImage>>();
         }
 
-        private CarImage ChangePhotoName(CarImage carImage)
+        private IDataResult<CarImage> AddPhotoToFolder(CarImage carImage)
         {
-            var newPathName = Guid.NewGuid().ToString() + ".jpg";
-
+            string oldImagePath = "../Images/" + carImage.ImagePath;
+            var newPathName = "../Images/" + Guid.NewGuid().ToString() + Path.GetExtension(oldImagePath);
+            // İlk argüman olarak resmin pathini göndermelisiniz.
+            // Şuan ki aşama için projeniz içerisine bir Images klasörü oluşturun ve içerisine attığınız resmi gönderin.
+            if (!File.Exists(oldImagePath))
+            {
+                return new ErrorDataResult<CarImage>(Messages.FileNotFound);
+            }
+            File.Copy(oldImagePath, newPathName); 
             carImage.ImagePath = newPathName;
-            return carImage;
+            return new SuccessDataResult<CarImage>(carImage);
+        }
+
+        private IResult CheckIfFileExtensionCorrect(string imagePath)
+        {
+            switch (Path.GetExtension(imagePath).ToLower())
+            {
+                case ".jpg":
+                    return new SuccessResult();
+                case ".jpeg":
+                    return new SuccessResult();
+                case ".png":
+                    return new SuccessResult();
+                default:
+                    return new ErrorResult(Messages.IncorrectFileExtension);
+            }
         }
     }
 }

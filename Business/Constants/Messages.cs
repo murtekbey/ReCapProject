@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -50,5 +51,7 @@ namespace Business.Constants
         public static string CarImageAdded = "Araba resmi eklendi";
         public static string CarImageUpdated = "Araba resmi güncellendi";
         public static string CarImageDeleted = "Araba resmi silindi";
+        public static string IncorrectFileExtension = "Resim uzantısı hatalı";
+        public static string FileNotFound = "Dosya belirtilen yolda bulunamadı";
     }
 }

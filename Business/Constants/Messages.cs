@@ -44,5 +44,11 @@ namespace Business.Constants
         public static string UserUpdated = "Kullanıcı güncellendi";
         public static string UserDeleted = "Kullanıcı silindi";
         public static string UserListed = "Kullanıcı listelendi";
+        public static string NameInvalid = "Girdiğiniz isimler en az 3 karakter uzunluğunda olmalıdır";
+
+        public static string CountOfCarImagesCorrect = "Bir arabanın en fazla 5 resmi olabilir";
+        public static string CarImageAdded = "Araba resmi eklendi";
+        public static string CarImageUpdated = "Araba resmi güncellendi";
+        public static string CarImageDeleted = "Araba resmi silindi";
     }
 }

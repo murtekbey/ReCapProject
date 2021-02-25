@@ -2,6 +2,7 @@
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
+using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -22,13 +23,8 @@ namespace Business.Concrete
         [ValidationAspect(typeof(BrandValidator))]
         public IResult Add(Brand brand)
         {
-            if (brand.BrandName.Length <= 2)
-            {
-                return new ErrorResult(Messages.BrandNameInvalid);
-            }
             _brandDal.Add(brand);
             return new SuccessResult(Messages.BrandAdded);
-
         }
 
         public IResult Delete(Brand brand)

@@ -2,6 +2,7 @@
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
+using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -26,7 +27,6 @@ namespace Business.Concrete
         {
             _carDal.Add(car);
             return new SuccessResult(Messages.CarAdded);
-
         }
 
         public IResult Delete(Car car)
@@ -65,17 +65,8 @@ namespace Business.Concrete
 
         public IResult Update(Car car)
         {
-            if (car.DailyPrice > 0)
-            {
-                _carDal.Update(car);
-                return new SuccessResult(Messages.CarUpdated);
-            }
             _carDal.Update(car);
-            return new SuccessResult(Messages.CarPriceInvalid);
+            return new SuccessResult(Messages.CarUpdated);
         }
-            
-            
-            
-
     }
 }

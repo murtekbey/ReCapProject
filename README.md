@@ -7,7 +7,7 @@
 ### Latest Updates - *Son Güncellemeler*
 
 - 25 February 2021
-	- [SqlQuery.sql](https://github.com/murtekbey/ReCapProject/blob/master/SQLQuery.sql) is updated for CarImages (SqlQuery dosyası CarImages eklenerek güncellendi.)
+	- [SqlQuery.sql](https://github.com/murtekbey/ReCapProject/blob/master/SQLQuery.sql) is updated for CarImages *(SqlQuery dosyası CarImages eklenerek güncellendi.)*
 	- Business Rules added *(Business kuralları eklendi.)*
 	- CarImages added to project. *(CarImages projeye eklendi.)*
 	- Filing Rules are added for CarImages *(CarImages için dosyalama kuralları eklendi.)*

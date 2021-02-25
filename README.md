@@ -6,6 +6,13 @@
 
 ### Latest Updates - *Son Güncellemeler*
 
+- 25 February 2021
+	- [SqlQuery.sql](https://github.com/murtekbey/ReCapProject/blob/master/SQLQuery.sql) is updated for CarImages (SqlQuery dosyası CarImages eklenerek güncellendi.)
+	- Business Rules added *(Business kuralları eklendi.)*
+	- CarImages added to project. *(CarImages projeye eklendi.)*
+	- Filing Rules are added for CarImages *(CarImages için dosyalama kuralları eklendi.)*
+	- Tested via [Postman](https://www.postman.com/) after refactoring. *(Yeniden düzenleme yapıldıktan sonra Postman aracılığıyla test edildi.)*
+
 - 18 February 2021
 	- Autofac, Autofac.Extensions.DependencyInjection, Autofac.Extras.DynamicProxy are added to project. *(Autofac projeye eklendi.)*
 	- AOP and IoC container structures are now used in the project *(Artık projede AOP ve IoC yapıları kullanılıyor.)*

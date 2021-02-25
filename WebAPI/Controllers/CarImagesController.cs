@@ -1,9 +1,13 @@
-﻿using Business.Abstract;
+﻿using AutoMapper;
+using Business.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,10 +18,14 @@ namespace WebAPI.Controllers
     public class CarImagesController : ControllerBase
     {
         ICarImageService _carImageService;
+        private IMapper _mapper;
+        public static IWebHostEnvironment _webHostEnvironment;
 
-        public CarImagesController(ICarImageService carImageService)
+        public CarImagesController(ICarImageService carImageService, IMapper mapper, IWebHostEnvironment webHostEnvironment)
         {
             _carImageService = carImageService;
+            _mapper = mapper;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -43,11 +51,33 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add(CarImage carImage)
+        public IActionResult Add([FromForm]CarImageCreationDto carImageCreationDto)
         {
+            var file = carImageCreationDto.File;
+            var carId = carImageCreationDto.CarId;
+            if (file == null || carId == null)
+            {
+                return BadRequest("Incorrect Data");
+            }   
+
+            string newFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            string path = _webHostEnvironment.WebRootPath + "\\images\\";
+
+            carImageCreationDto.ImagePath = path + newFileName;
+            var carImage = _mapper.Map<CarImage>(carImageCreationDto);
             var result = _carImageService.Add(carImage);
+
             if (result.Success)
             {
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                using (FileStream fileStream = System.IO.File.Create(path + newFileName))
+                {
+                    file.CopyTo(fileStream);
+                    fileStream.Flush();
+                }
                 return Ok(result);
             }
             return BadRequest(result);

@@ -5,6 +5,10 @@
 - *Araç kiralama operasyonlarınızı yönetebileceğiniz bir otomasyon projesidir. Modüler PnP (Tak ve Çalıştır) mimarisine uygun, SOLID prensiplerine ve temiz mimari yöntemlerine bağlı bir projedir. Hala proje üzerinde çalışmalar devam ediyor. Zaman içerisinde ilerleyecek ve nihai şeklini alacaktır*
 
 ### Latest Updates - *Son Güncellemeler*
+- 26 February 2021
+	- CarImageCreationDto is added *(CarImageCreationDto eklendi)*
+	- AutoMapper injected to WebAPI layer *(WebAPI katmanına AutoMapper eklendi)*
+	- Image files "POST" operations can now be executed via FormData. (Resim dosyaları "POST" operasyonları artık FormData üzerinden gerçekleştirilebilir.)
 
 - 25 February 2021
 	- [SqlQuery.sql](https://github.com/murtekbey/ReCapProject/blob/master/SQLQuery.sql) is updated for CarImages *(SqlQuery dosyası CarImages eklenerek güncellendi.)*
@@ -34,24 +38,30 @@
 ### Installation - *Kurulum*
 - [SqlQuery.sql](https://github.com/murtekbey/ReCapProject/blob/master/SQLQuery.sql) Create your table as you can see on the link. *(Tablonuzu linkde gördüğünüz şekilde oluşturun)*
 
-- __*"Autofac v6.1.0"*__ package must be added to the following layers via "NuGet" *("NuGet" aracılığıyla "Autofac v6.1.0" paketi aşağıdaki katmanlara eklenmelidir)*
+- __*"Autofac v6.1.0"*__ package must be added to the following layers *("Autofac v6.1.0" paketi aşağıdaki katmanlara eklenmelidir)*
 	- [Business](https://github.com/murtekbey/ReCapProject/tree/master/Business)
 	- [Core](https://github.com/murtekbey/ReCapProject/tree/master/Core)
 
-- __*"Autofac.Extensions.DependencyInjection v7.1.0"*__ package must be added to the following layers via "NuGet" *("NuGet" aracılığıyla "Autofac.Extensions.DependencyInjection v7.1.0" paketi aşağıdaki katmanlara eklenmelidir)*
+- __*"Autofac.Extensions.DependencyInjection v7.1.0"*__ package must be added to the following layers *("Autofac.Extensions.DependencyInjection v7.1.0" paketi aşağıdaki katmanlara eklenmelidir)*
 	- [Core](https://github.com/murtekbey/ReCapProject/tree/master/Core)
 	- [WebAPI](https://github.com/murtekbey/ReCapProject/tree/master/WebAPI)
 
-- __*"Autofac.Extras.DynamicProxy v6.0.0"*__ package must be added to the following layers via "NuGet" *("NuGet" aracılığıyla "Autofac.Extras.DynamicProxy v6.0.0" paketi aşağıdaki katmanlara eklenmelidir)*
+- __*"Autofac.Extras.DynamicProxy v6.0.0"*__ package must be added to the following layers *("Autofac.Extras.DynamicProxy v6.0.0" paketi aşağıdaki katmanlara eklenmelidir)*
 	- [Business](https://github.com/murtekbey/ReCapProject/tree/master/Business)
 	- [Core](https://github.com/murtekbey/ReCapProject/tree/master/Core)
 
-- __*"Microsoft.EntityFrameworkCore v3.1.11"*__ package must be added to the following layers via "NuGet" *("NuGet" aracılığıyla "Microsoft.EntityFrameworkCore v3.1.11" paketi aşağıdaki katmanlara eklenmelidir)*
+- __*"Microsoft.EntityFrameworkCore v3.1.11"*__ package must be added to the following layers *("Microsoft.EntityFrameworkCore v3.1.11" paketi aşağıdaki katmanlara eklenmelidir)*
 	- [DataAccess](https://github.com/murtekbey/ReCapProject/tree/master/DataAccess)
 
-- __*"Microsoft.EntityFrameworkCore.SqlServer v3.1.11"*__ package must be added to the following layers via "NuGet" *("NuGet" aracılığıyla "Microsoft.EntityFrameworkCore.SqlServer v3.1.11" paketi aşağıdaki katmanlara eklenmelidir)*
+- __*"Microsoft.EntityFrameworkCore.SqlServer v3.1.11"*__ package must be added to the following layers *("Microsoft.EntityFrameworkCore.SqlServer v3.1.11" paketi aşağıdaki katmanlara eklenmelidir)*
 	- [Core](https://github.com/murtekbey/ReCapProject/tree/master/Core)
 	- [DataAccess](https://github.com/murtekbey/ReCapProject/tree/master/DataAccess)
+
+- __*"AutoMapper.Extensions.Microsoft.DependencyInjection v8.1.1"__ package must be added to the following layers *("AutoMapper.Extensions.Microsoft.DependencyInjection" paketi aşağıdaki katmana eklenmelidir)*
+	- [WebAPI](https://github.com/murtekbey/ReCapProject/tree/master/WebAPI)
+
+- __*"AutoMapper v10.1.1"__ package must be added to the following layers *("AutoMapper" paketi aşağıdaki katmana eklenmelidir)*
+	- [WebAPI](https://github.com/murtekbey/ReCapProject/tree/master/WebAPI)
 
 ### Layers - *Katmanlar*
 - [Business](https://github.com/murtekbey/ReCapProject/tree/master/Business)

@@ -28,8 +28,7 @@ namespace Business.Concrete
         {
             IResult result = BusinessRules.Run(
                 CheckIfCountOfCarImagesCorrect(carImage.CarId),
-                CheckIfFileExtensionCorrect(carImage.ImagePath),
-                AddPhotoToFolder(carImage)
+                CheckIfFileExtensionCorrect(carImage.ImagePath)
                 );
 
             if (result != null)
@@ -104,25 +103,10 @@ namespace Business.Concrete
             if (!result)
             {
                 return new ErrorDataResult<List<CarImage>>(new List<CarImage> 
-                { new CarImage {ImagePath = "../Images/logo.png"} } 
+                { new CarImage {ImagePath = "../WebAPI/wwwroot/images/logo.png"} }
                 ); 
             }
             return new SuccessDataResult<List<CarImage>>();
-        }
-
-        private IDataResult<CarImage> AddPhotoToFolder(CarImage carImage)
-        {
-            string oldImagePath = "../Images/" + carImage.ImagePath;
-            var newPathName = "../Images/" + Guid.NewGuid().ToString() + Path.GetExtension(oldImagePath);
-            // İlk argüman olarak resmin pathini göndermelisiniz.
-            // Şuan ki aşama için projeniz içerisine bir Images klasörü oluşturun ve içerisine attığınız resmi gönderin.
-            if (!File.Exists(oldImagePath))
-            {
-                return new ErrorDataResult<CarImage>(Messages.FileNotFound);
-            }
-            File.Copy(oldImagePath, newPathName); 
-            carImage.ImagePath = newPathName;
-            return new SuccessDataResult<CarImage>(carImage);
         }
 
         private IResult CheckIfFileExtensionCorrect(string imagePath)

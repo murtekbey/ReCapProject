@@ -8,7 +8,7 @@ using Entities.DTOs;
 
 namespace SehirRehberi.API.Helpers
 {
-    public class AutoMapperProfiles:Profile
+    public class AutoMapperProfiles : Profile
     {
         public AutoMapperProfiles()
         {

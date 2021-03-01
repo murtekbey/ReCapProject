@@ -1,4 +1,5 @@
 ﻿using Business.Concrete;
+using Core.Entities.Concrete;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using System;
@@ -9,16 +10,6 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            //CarTest();
-            //BrandTest();
-            //ColorTest();
-            //AddColorTest();
-            //DeleteColorTest();
-            //UpdateColorTest();
-            //CarByModelYearTest();
-            //CarDtoTest();
-            //AddUserTest();
-            //AddCustomerTest();
             //AddRentalTest();
         }
 
@@ -56,19 +47,6 @@ namespace ConsoleUI
                     Console.WriteLine(result.Message);
                 }
             }
-        }
-
-        private static void AddCustomerTest()
-        {
-            UserManager userManager = new UserManager(new EfUserDal());
-            CustomerManager customerManager = new CustomerManager(new EfCustomerDal());
-            customerManager.Add(new Customer { UserId = userManager.GetById(1).Data.Id, CompanyName = "Muboys Adi Ortaklığı" });
-        }
-
-        private static void AddUserTest()
-        {
-            UserManager userManager = new UserManager(new EfUserDal());
-            userManager.Add(new User { FirstName = "Murat", LastName = "Altınpınar", Email = "email@email.com", Password = "1234" });
         }
 
         private static void CarDtoTest()

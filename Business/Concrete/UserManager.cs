@@ -21,6 +21,7 @@ namespace Business.Concrete
             _userDal = userDal;
         }
 
+        [ValidationAspect(typeof(UserValidator))]
         public void Add(User user)
         {
             _userDal.Add(user);

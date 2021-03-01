@@ -4,9 +4,12 @@ using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Business;
+using Core.Utilities.Helpers;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,25 +27,41 @@ namespace Business.Concrete
             _carImageDal = carImageDal;
         }
 
-        [SecuredOperation("admin")]
+        //[SecuredOperation("admin")]
         [ValidationAspect(typeof(CarImageValidator))]
-        public IResult Add(CarImage carImage)
+        public IResult Add(CarImageCreationDto carImageCreationDto)
         {
             IResult result = BusinessRules.Run(
-                CheckIfCountOfCarImagesCorrect(carImage.CarId),
-                CheckIfFileExtensionCorrect(carImage.ImagePath)
+                CheckIfCountOfCarImagesCorrect(carImageCreationDto.CarId),
+                CheckIfFileExtensionCorrect(carImageCreationDto.File.FileName)
                 );
 
             if (result != null)
             {
                 return result;
             }
+
+            var newImage = FileHelper.Add(carImageCreationDto.ImagePath, carImageCreationDto.File);
+            var carImage = new CarImage
+            {
+                CarId = carImageCreationDto.CarId,
+                Date = carImageCreationDto.Date,
+                ImagePath = carImageCreationDto.ImagePath + newImage
+            };
             _carImageDal.Add(carImage);
             return new SuccessResult(Messages.CarImageAdded);
         }
 
-        public IResult Delete(CarImage carImage)
+        public IResult Delete(CarImageCreationDto carImageCreationDto)
         {
+            var carImage = _carImageDal.Get(x => x.Id == carImageCreationDto.Id);
+            var result = BusinessRules.Run(FileHelper.Delete(carImage.ImagePath));
+
+            if (result != null)
+            {
+                return result;
+            }
+
             _carImageDal.Delete(carImage);
             return new SuccessResult(Messages.CarImageDeleted);
         }
@@ -76,15 +95,24 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(CarImageValidator))]
-        public IResult Update(CarImage carImage)
+        public IResult Update(CarImageCreationDto carImageCreationDto)
         {
-            IResult result = BusinessRules.Run(CheckIfCountOfCarImagesCorrect(carImage.CarId));
+            IResult result = BusinessRules.Run(CheckIfFileExtensionCorrect(carImageCreationDto.File.FileName));
 
             if (result != null)
             {
                 return result;
             }
 
+            string oldPath = _carImageDal.Get(p => p.Id == carImageCreationDto.Id).ImagePath;
+            var newImage = FileHelper.Update(oldPath, carImageCreationDto.ImagePath, carImageCreationDto.File);
+            var carImage = new CarImage
+            {
+                Id = carImageCreationDto.Id,
+                CarId = carImageCreationDto.CarId,
+                Date = DateTime.Now,
+                ImagePath = carImageCreationDto.ImagePath + newImage
+            };
             _carImageDal.Update(carImage);
             return new SuccessResult(Messages.CarImageUpdated);
         }
@@ -105,7 +133,7 @@ namespace Business.Concrete
             if (!result)
             {
                 return new ErrorDataResult<List<CarImage>>(new List<CarImage> 
-                { new CarImage {ImagePath = "../WebAPI/wwwroot/images/logo.png"} }
+                { new CarImage {ImagePath = "..\\..\\..\\wwwroot\\images\\logo.png"} }
                 ); 
             }
             return new SuccessDataResult<List<CarImage>>();

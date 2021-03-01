@@ -66,7 +66,7 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<List<RentalDetailDto>>(Messages.MaintenanceTime);
             }
-            return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalDetails());
+            return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalDetails(filter));
         }
 
         public IResult Update(Rental rental)

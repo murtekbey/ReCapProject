@@ -19,14 +19,6 @@ CREATE TABLE Cars(
 	FOREIGN KEY (BrandID) REFERENCES Brands(BrandID)
 );
 
-CREATE TABLE Users(
-    Id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
-    FirstName NVARCHAR (100) NOT NULL,
-    LastName NVARCHAR (100) NOT NULL,
-    Email NVARCHAR (100) UNIQUE NOT NULL,
-    [Password] NVARCHAR (100) NOT NULL,
-);
-
 CREATE TABLE Customers(
     Id INT PRIMARY KEY IDENTITY (1, 1) NOT NULL,
     UserId INT UNIQUE NOT NULL,
@@ -50,4 +42,30 @@ CREATE TABLE CarImages (
     ImagePath NVARCHAR (MAX) NOT NULL,
     Date DATE NOT NULL,
     FOREIGN KEY (CarId) REFERENCES Cars(Id)
+);
+
+CREATE TABLE [dbo].[Users] (
+    [Id]           INT             IDENTITY (1, 1) NOT NULL,
+    [FirstName]    VARCHAR (50)    NOT NULL,
+    [LastName]     VARCHAR (50)    NOT NULL,
+    [Email]        VARCHAR (50)    NOT NULL,
+    [PasswordHash] VARBINARY (500) NOT NULL,
+    [PasswordSalt] VARBINARY (500) NOT NULL,
+    [Status]       BIT             NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+CREATE TABLE [dbo].[OperationClaims] (
+    [Id]   INT           IDENTITY (1, 1) NOT NULL,
+    [Name] VARCHAR (250) NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+CREATE TABLE [dbo].[UserOperationClaims] (
+    [Id]               INT IDENTITY (1, 1) NOT NULL,
+    [UserId]           INT NOT NULL,
+    [OperationClaimId] INT NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    FOREIGN KEY ([OperationClaimId]) REFERENCES [dbo].[OperationClaims] ([Id]),
+    FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([Id])
 );

@@ -24,7 +24,7 @@ $ dotnet restore
 ### Latest Updates - *Son Güncellemeler*
 - 02 March 2021
 	- Authentication and Authorization is added. *(Kimlik doğrulama ve yetkilendirme eklendi.)*
-	- For now, Need Authorization for Create, Update, Delete functions. *(Artık ekleme, silme ve güncellem fonksiyonları için yetkiye ihtiyaç var.)*
+	- For now, Need Authorization for Create, Update, Delete functions. *(Artık ekleme, silme ve güncelleme fonksiyonları için yetkiye ihtiyaç var.)*
 	- [SqlQuery.sql](https://github.com/murtekbey/ReCapProject/blob/master/SQLQuery.sql) is updated for Authorization tables. *(SqlQuery dosyası güncellendi.)*
 	- Tested via [Postman](https://www.postman.com/) *(Postman aracılığıyla test edildi.)*
 	- CarImages operations are refactored. *(CarImages operasyonları yeniden düzenlendi.)*

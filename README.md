@@ -9,16 +9,16 @@
 
 - Please run the following codes in order to install the required packages. *(Gerekli paketleri kurmak için lütfen aşağıdaki kodları sırasıyla çalıştırın.)*
 ```
-# Clone to repository *(Depoyu klonla)*
+# Clone to repository (Depoyu klonla)
 $ git clone https://github.com/murtekbey/ReCapProject
 
-# Go to the folder you cloned *(Klonladığınız klasöre gidin)*
+# Go to the folder you cloned (Klonladığınız klasöre gidin)
 $ cd ReCapProject
 
-# Install dependencies *(Bağımlı olduğunuz paketleri yükleyin)*
+# Install dependencies (Bağımlı olduğunuz paketleri yükleyin)
 $ dotnet restore
 
-# Run the application from the WebAPI layer *(WebAPI katmanından uygulamayı çalıştırın)*
+# Run the application from the WebAPI layer (WebAPI katmanından uygulamayı çalıştırın)
 ```
 
 ### Latest Updates - *Son Güncellemeler*

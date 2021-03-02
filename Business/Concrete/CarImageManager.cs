@@ -27,7 +27,7 @@ namespace Business.Concrete
             _carImageDal = carImageDal;
         }
 
-        //[SecuredOperation("admin")]
+        [SecuredOperation("admin")]
         [ValidationAspect(typeof(CarImageValidator))]
         public IResult Add(CarImageCreationDto carImageCreationDto)
         {
@@ -52,6 +52,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CarImageAdded);
         }
 
+        [SecuredOperation("admin")]
         public IResult Delete(CarImageCreationDto carImageCreationDto)
         {
             var carImage = _carImageDal.Get(x => x.Id == carImageCreationDto.Id);
@@ -94,6 +95,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll(p => p.CarId == carId));
         }
 
+        [SecuredOperation("admin")]
         [ValidationAspect(typeof(CarImageValidator))]
         public IResult Update(CarImageCreationDto carImageCreationDto)
         {

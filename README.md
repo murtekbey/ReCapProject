@@ -4,11 +4,36 @@
 - This is an automation project where you can manage your car rental operations. Still working on this project. It is a fast software development infrastructure suitable for modular PnP (Plug and Play) architecture, focusing on SOLID principles and Clean Architecture methods. The project will progress and take its final form over time.
 - *Araç kiralama operasyonlarınızı yönetebileceğiniz bir otomasyon projesidir. Modüler PnP (Tak ve Çalıştır) mimarisine uygun, SOLID prensiplerine ve temiz mimari yöntemlerine bağlı bir projedir. Hala proje üzerinde çalışmalar devam ediyor. Zaman içerisinde ilerleyecek ve nihai şeklini alacaktır*
 
+### Installation - *Kurulum*
+- [SqlQuery.sql](https://github.com/murtekbey/ReCapProject/blob/master/SQLQuery.sql) Create your table as you can see on the link. *(Tablonuzu linkde gördüğünüz şekilde oluşturun)*
+
+- Please run the following codes in order to install the required packages. *(Gerekli paketleri kurmak için lütfen aşağıdaki kodları sırasıyla çalıştırın.)*
+```
+# Clone to repository *(Depoyu klonla)*
+$ git clone https://github.com/murtekbey/ReCapProject
+
+# Go to the folder you cloned *(Klonladığınız klasöre gidin)*
+$ cd ReCapProject
+
+# Install dependencies *(Bağımlı olduğunuz paketleri yükleyin)*
+$ dotnet restore
+
+# Run the application from the WebAPI layer *(WebAPI katmanından uygulamayı çalıştırın)*
+```
+
 ### Latest Updates - *Son Güncellemeler*
+- 02 March 2021
+	- Authentication and Authorization is added. *(Kimlik doğrulama ve yetkilendirme eklendi.)*
+	- For now, Need Authorization for Create, Update, Delete functions. *(Artık ekleme, silme ve güncellem fonksiyonları için yetkiye ihtiyaç var.)*
+	- [SqlQuery.sql](https://github.com/murtekbey/ReCapProject/blob/master/SQLQuery.sql) is updated for Authorization tables. *(SqlQuery dosyası güncellendi.)*
+	- Tested via [Postman](https://www.postman.com/) *(Postman aracılığıyla test edildi.)*
+	- CarImages operations are refactored. *(CarImages operasyonları yeniden düzenlendi.)*
+	- ConsoleUI layer is removed. *(ConsoleUI katmanı silindi.)*
+
 - 26 February 2021
 	- CarImageCreationDto is added *(CarImageCreationDto eklendi)*
 	- AutoMapper injected to WebAPI layer *(WebAPI katmanına AutoMapper eklendi)*
-	- Image files "POST" operations can now be executed via FormData. (Resim dosyaları "POST" operasyonları artık FormData üzerinden gerçekleştirilebilir.)
+	- Image files "POST" operations can now be executed via FormData. *(Resim dosyaları "POST" operasyonları artık FormData üzerinden gerçekleştirilebilir.)*
 
 - 25 February 2021
 	- [SqlQuery.sql](https://github.com/murtekbey/ReCapProject/blob/master/SQLQuery.sql) is updated for CarImages *(SqlQuery dosyası CarImages eklenerek güncellendi.)*
@@ -35,40 +60,11 @@
 	- Some bugs fixed.
 	- Tested via [Postman](https://www.postman.com/)
 
-### Installation - *Kurulum*
-- [SqlQuery.sql](https://github.com/murtekbey/ReCapProject/blob/master/SQLQuery.sql) Create your table as you can see on the link. *(Tablonuzu linkde gördüğünüz şekilde oluşturun)*
-
-- __*"Autofac v6.1.0"*__ package must be added to the following layers *("Autofac v6.1.0" paketi aşağıdaki katmanlara eklenmelidir)*
-	- [Business](https://github.com/murtekbey/ReCapProject/tree/master/Business)
-	- [Core](https://github.com/murtekbey/ReCapProject/tree/master/Core)
-
-- __*"Autofac.Extensions.DependencyInjection v7.1.0"*__ package must be added to the following layers *("Autofac.Extensions.DependencyInjection v7.1.0" paketi aşağıdaki katmanlara eklenmelidir)*
-	- [Core](https://github.com/murtekbey/ReCapProject/tree/master/Core)
-	- [WebAPI](https://github.com/murtekbey/ReCapProject/tree/master/WebAPI)
-
-- __*"Autofac.Extras.DynamicProxy v6.0.0"*__ package must be added to the following layers *("Autofac.Extras.DynamicProxy v6.0.0" paketi aşağıdaki katmanlara eklenmelidir)*
-	- [Business](https://github.com/murtekbey/ReCapProject/tree/master/Business)
-	- [Core](https://github.com/murtekbey/ReCapProject/tree/master/Core)
-
-- __*"Microsoft.EntityFrameworkCore v3.1.11"*__ package must be added to the following layers *("Microsoft.EntityFrameworkCore v3.1.11" paketi aşağıdaki katmanlara eklenmelidir)*
-	- [DataAccess](https://github.com/murtekbey/ReCapProject/tree/master/DataAccess)
-
-- __*"Microsoft.EntityFrameworkCore.SqlServer v3.1.11"*__ package must be added to the following layers *("Microsoft.EntityFrameworkCore.SqlServer v3.1.11" paketi aşağıdaki katmanlara eklenmelidir)*
-	- [Core](https://github.com/murtekbey/ReCapProject/tree/master/Core)
-	- [DataAccess](https://github.com/murtekbey/ReCapProject/tree/master/DataAccess)
-
-- __*"AutoMapper.Extensions.Microsoft.DependencyInjection v8.1.1"__ package must be added to the following layers *("AutoMapper.Extensions.Microsoft.DependencyInjection" paketi aşağıdaki katmana eklenmelidir)*
-	- [WebAPI](https://github.com/murtekbey/ReCapProject/tree/master/WebAPI)
-
-- __*"AutoMapper v10.1.1"__ package must be added to the following layers *("AutoMapper" paketi aşağıdaki katmana eklenmelidir)*
-	- [WebAPI](https://github.com/murtekbey/ReCapProject/tree/master/WebAPI)
-
 ### Layers - *Katmanlar*
 - [Business](https://github.com/murtekbey/ReCapProject/tree/master/Business)
 - [Core](https://github.com/murtekbey/ReCapProject/tree/master/Core)
 - [DataAccess](https://github.com/murtekbey/ReCapProject/tree/master/DataAccess)
 - [Entities](https://github.com/murtekbey/ReCapProject/tree/master/Entities)
-- [ConsoleUI](https://github.com/murtekbey/ReCapProject/tree/master/ConsoleUI)
 - [WebAPI](https://github.com/murtekbey/ReCapProject/tree/master/WebAPI)
 
 _**Code released under the [MIT](https://github.com/murtekbey/ReCapProject/blob/master/LICENSE) License. © 2021 Murat ALTINPINAR**_

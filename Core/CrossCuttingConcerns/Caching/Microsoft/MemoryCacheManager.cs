@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Core.Utilities.IoC;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Linq;
 

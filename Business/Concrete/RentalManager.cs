@@ -2,6 +2,7 @@
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Business;
 using Core.Utilities.Results;
@@ -25,6 +26,7 @@ namespace Business.Concrete
 
         [SecuredOperation("admin")]
         [ValidationAspect(typeof(RentalValidator))]
+        [CacheRemoveAspect("IRentalService.Get")]
         public IResult Add(Rental rental)
         {
             IResult result = BusinessRules.Run(CheckIfNoReturnDate(rental));
@@ -39,12 +41,15 @@ namespace Business.Concrete
         }
 
         [SecuredOperation("admin")]
+        [CacheRemoveAspect("IRentalService.Get")]
         public IResult Delete(Rental rental)
         {
             _rentalDal.Delete(rental);
             return new SuccessResult(Messages.RentalDeleted);
         }
 
+        [CacheAspect]
+        [SecuredOperation("user")]
         public IDataResult<List<Rental>> GetAll()
         {
             if (DateTime.Now.Hour == 00)
@@ -54,6 +59,8 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(), Messages.RentalListed);
         }
 
+        [CacheAspect]
+        [SecuredOperation("user")]
         public IDataResult<Rental> GetById(int id)
         {
             if (DateTime.Now.Hour == 00)
@@ -63,6 +70,8 @@ namespace Business.Concrete
             return new SuccessDataResult<Rental>(_rentalDal.Get(b => b.Id == id));
         }
 
+        [CacheAspect]
+        [SecuredOperation("user")]
         public IDataResult<List<RentalDetailDto>> GetRentalDetails(Expression<Func<Rental, bool>> filter = null)
         {
             if (DateTime.Now.Hour == 00)
@@ -73,6 +82,8 @@ namespace Business.Concrete
         }
 
         [SecuredOperation("admin")]
+        [ValidationAspect(typeof(RentalValidator))]
+        [CacheRemoveAspect("IRentalService.Get")]
         public IResult Update(Rental rental)
         {
             IResult result = BusinessRules.Run(CheckIfNoReturnDate(rental));

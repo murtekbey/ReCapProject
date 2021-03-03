@@ -55,6 +55,7 @@ namespace Business.Constants
         public static string CarImageDeleted = "Araba resmi silindi";
         public static string IncorrectFileExtension = "Resim uzantısı hatalı";
         public static string FileNotFound = "Dosya belirtilen yolda bulunamadı";
+
         public static string UserNotFound = "Kullanıcı bulunamadı";
         public static string PasswordError = "Parola hatalı";
         public static string SuccessfullLogin = "Sisteme giriş başarılı";

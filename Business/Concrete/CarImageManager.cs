@@ -2,6 +2,7 @@
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Business;
 using Core.Utilities.Helpers;
@@ -29,6 +30,7 @@ namespace Business.Concrete
 
         [SecuredOperation("admin")]
         [ValidationAspect(typeof(CarImageValidator))]
+        [CacheRemoveAspect("ICarImageService.Get")]
         public IResult Add(CarImageCreationDto carImageCreationDto)
         {
             IResult result = BusinessRules.Run(
@@ -53,6 +55,7 @@ namespace Business.Concrete
         }
 
         [SecuredOperation("admin")]
+        [CacheRemoveAspect("ICarImageService.Get")]
         public IResult Delete(CarImageCreationDto carImageCreationDto)
         {
             var carImage = _carImageDal.Get(x => x.Id == carImageCreationDto.Id);
@@ -67,6 +70,8 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CarImageDeleted);
         }
 
+        [CacheAspect]
+        [SecuredOperation("user")]
         public IDataResult<List<CarImage>> GetAll()
         {
             if (DateTime.Now.Hour == 00)
@@ -76,6 +81,8 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll());
         }
 
+        [CacheAspect]
+        [SecuredOperation("user")]
         public IDataResult<CarImage> GetById(int carImageId)
         {
             if (DateTime.Now.Hour == 00)
@@ -85,6 +92,8 @@ namespace Business.Concrete
             return new SuccessDataResult<CarImage>(_carImageDal.Get(c => c.Id == carImageId));
         }
 
+        [CacheAspect]
+        [SecuredOperation("user")]
         public IDataResult<List<CarImage>> GetPhotosByCarId(int carId)
         {
             IDataResult<List<CarImage>> result = (IDataResult<List<CarImage>>)BusinessRules.Run(CheckIfPhotosExistsForCar(carId));
@@ -97,6 +106,7 @@ namespace Business.Concrete
 
         [SecuredOperation("admin")]
         [ValidationAspect(typeof(CarImageValidator))]
+        [CacheRemoveAspect("ICarImageService.Get")]
         public IResult Update(CarImageCreationDto carImageCreationDto)
         {
             IResult result = BusinessRules.Run(CheckIfFileExtensionCorrect(carImageCreationDto.File.FileName));

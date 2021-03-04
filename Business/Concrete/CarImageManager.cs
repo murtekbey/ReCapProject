@@ -3,6 +3,7 @@ using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Business;
 using Core.Utilities.Helpers;
@@ -68,8 +69,8 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CarImageDeleted);
         }
 
+        [SecuredOperation("user,admin")]
         [CacheAspect]
-        [SecuredOperation("user")]
         public IDataResult<List<CarImage>> GetAll()
         {
             if (DateTime.Now.Hour == 00)
@@ -79,8 +80,8 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll());
         }
 
+        [SecuredOperation("user,admin")]
         [CacheAspect]
-        [SecuredOperation("user")]
         public IDataResult<CarImage> GetById(int carImageId)
         {
             if (DateTime.Now.Hour == 00)
@@ -90,8 +91,8 @@ namespace Business.Concrete
             return new SuccessDataResult<CarImage>(_carImageDal.Get(c => c.Id == carImageId));
         }
 
+        [SecuredOperation("user,admin")]
         [CacheAspect]
-        [SecuredOperation("user")]
         public IDataResult<List<CarImage>> GetPhotosByCarId(int carId)
         {
             IDataResult<List<CarImage>> result = (IDataResult<List<CarImage>>)BusinessRules.Run(CheckIfPhotosExistsForCar(carId));
@@ -104,6 +105,7 @@ namespace Business.Concrete
 
         [SecuredOperation("admin")]
         [ValidationAspect(typeof(CarImageValidator))]
+        [TransactionScopeAspect]
         [CacheRemoveAspect("ICarImageService.Get")]
         public IResult Update(CarImageCreationDto carImageCreationDto)
         {

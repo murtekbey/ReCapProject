@@ -48,8 +48,8 @@ namespace Business.Concrete
             return new SuccessResult(Messages.RentalDeleted);
         }
 
+        [SecuredOperation("user,admin")]
         [CacheAspect]
-        [SecuredOperation("user")]
         public IDataResult<List<Rental>> GetAll()
         {
             if (DateTime.Now.Hour == 00)
@@ -59,8 +59,8 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(), Messages.RentalListed);
         }
 
+        [SecuredOperation("user,admin")]
         [CacheAspect]
-        [SecuredOperation("user")]
         public IDataResult<Rental> GetById(int id)
         {
             if (DateTime.Now.Hour == 00)
@@ -70,8 +70,8 @@ namespace Business.Concrete
             return new SuccessDataResult<Rental>(_rentalDal.Get(b => b.Id == id));
         }
 
+        [SecuredOperation("user,admin")]
         [CacheAspect]
-        [SecuredOperation("user")]
         public IDataResult<List<RentalDetailDto>> GetRentalDetails(Expression<Func<Rental, bool>> filter = null)
         {
             if (DateTime.Now.Hour == 00)

@@ -38,8 +38,8 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ColorDeleted);
         }
 
+        [SecuredOperation("user,admin")]
         [CacheAspect]
-        [SecuredOperation("user")]
         public IDataResult<List<Color>> GetAll()
         {
             if (DateTime.Now.Hour == 00)
@@ -50,8 +50,8 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Color>>(_colorDal.GetAll(), Messages.ColorListed);
         }
 
+        [SecuredOperation("user,admin")]
         [CacheAspect]
-        [SecuredOperation("user")]
         public IDataResult<Color> GetById(int id)
         {
             if (DateTime.Now.Hour == 00)

@@ -38,8 +38,8 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CustomerDeleted);
         }
 
+        [SecuredOperation("user,admin")]
         [CacheAspect]
-        [SecuredOperation("user")]
         public IDataResult<List<Customer>> GetAll()
         {
             if (DateTime.Now.Hour == 00)
@@ -49,8 +49,8 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(), Messages.CustomerListed);
         }
 
+        [SecuredOperation("user,admin")]
         [CacheAspect]
-        [SecuredOperation("user")]
         public IDataResult<Customer> GetById(int id)
         {
             if (DateTime.Now.Hour == 00)

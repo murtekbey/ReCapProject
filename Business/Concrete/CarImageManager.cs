@@ -29,6 +29,7 @@ namespace Business.Concrete
 
         [SecuredOperation("admin")]
         [ValidationAspect(typeof(CarImageValidator))]
+        [TransactionScopeAspect]
         [CacheRemoveAspect("ICarImageService.Get")]
         public IResult Add(CarImageCreationDto carImageCreationDto)
         {

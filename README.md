@@ -22,6 +22,15 @@ $ dotnet restore
 ```
 
 ### Latest Updates - *Son Güncellemeler*
+- 04 March 2021
+	- Cache is added.
+	- Transaction is added.
+	- Performance is added.
+	- Managers are refactored according to new updates *(Managerlar yeni güncellemelere göre yeniden düzenlendi.)*
+	- Performance time was set to 1 second for testing purposes. You can update it if you want. *(Test etme amacıyla performans süresi 1 saniye olarak ayarlandı. İsterseniz güncelleyebilirsiniz.)*
+	- Tested via [Postman](https://www.postman.com/) *(Postman aracılığıyla test edildi.)*
+
+
 - 02 March 2021
 	- Authentication and Authorization is added. *(Kimlik doğrulama ve yetkilendirme eklendi.)*
 	- For now, Need Authorization for Create, Update, Delete functions. *(Artık ekleme, silme ve güncelleme fonksiyonları için yetkiye ihtiyaç var.)*

@@ -38,7 +38,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ColorDeleted);
         }
 
-        [SecuredOperation("user,admin")]
+        //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<List<Color>> GetAll()
         {
@@ -50,7 +50,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Color>>(_colorDal.GetAll(), Messages.ColorListed);
         }
 
-        [SecuredOperation("user,admin")]
+        //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<Color> GetById(int id)
         {

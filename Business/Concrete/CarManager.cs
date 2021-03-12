@@ -40,7 +40,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CarDeleted);
         }
 
-        [SecuredOperation("user,admin")]
+        //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<List<Car>> GetAll()
         {
@@ -52,7 +52,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarListed);
         }
 
-        [SecuredOperation("user,admin")]
+        //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<Car> GetById(int carId)
         {
@@ -63,7 +63,7 @@ namespace Business.Concrete
             return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == carId));
         }
 
-        [SecuredOperation("user,admin")]
+        //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<List<CarDetailDto>> GetCarDetails(Expression<Func<Car, bool>> filter = null)
         {

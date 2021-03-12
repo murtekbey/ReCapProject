@@ -70,7 +70,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CarImageDeleted);
         }
 
-        [SecuredOperation("user,admin")]
+        //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<List<CarImage>> GetAll()
         {
@@ -81,7 +81,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll());
         }
 
-        [SecuredOperation("user,admin")]
+        //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<CarImage> GetById(int carImageId)
         {
@@ -92,7 +92,7 @@ namespace Business.Concrete
             return new SuccessDataResult<CarImage>(_carImageDal.Get(c => c.Id == carImageId));
         }
 
-        [SecuredOperation("user,admin")]
+        //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<List<CarImage>> GetPhotosByCarId(int carId)
         {

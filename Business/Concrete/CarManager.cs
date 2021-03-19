@@ -10,7 +10,6 @@ using Entities.Concrete;
 using Entities.DTOs;
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace Business.Concrete
 {
@@ -44,7 +43,7 @@ namespace Business.Concrete
         [CacheAspect]
         public IDataResult<List<Car>> GetAll()
         {
-            if (DateTime.Now.Hour == 5)
+            if (DateTime.Now.Hour == 6)
             {
                 return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
             }
@@ -56,7 +55,7 @@ namespace Business.Concrete
         [CacheAspect]
         public IDataResult<Car> GetById(int carId)
         {
-            if (DateTime.Now.Hour == 5)
+            if (DateTime.Now.Hour == 6)
             {
                 return new ErrorDataResult<Car>(Messages.MaintenanceTime);
             }
@@ -65,13 +64,52 @@ namespace Business.Concrete
 
         //[SecuredOperation("user,admin")]
         [CacheAspect]
-        public IDataResult<List<CarDetailDto>> GetCarDetails(Expression<Func<Car, bool>> filter = null)
+        public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
-            if (DateTime.Now.Hour == 5)
+            if (DateTime.Now.Hour == 6)
             {
                 return new ErrorDataResult<List<CarDetailDto>>(Messages.MaintenanceTime);
             }
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(filter));
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails());
+        }
+
+        [CacheAspect]
+        public IDataResult<List<CarDetailDto>> GetCarDetailsByBrand(int brandId)
+        {
+            if (DateTime.Now.Hour == 6)
+            {
+                return new ErrorDataResult<List<CarDetailDto>>(Messages.MaintenanceTime);
+            }
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(x => x.BrandId == brandId));
+        }
+
+        [CacheAspect]
+        public IDataResult<List<CarDetailDto>> GetCarDetailsByColor(int colorId)
+        {
+            if (DateTime.Now.Hour == 6)
+            {
+                return new ErrorDataResult<List<CarDetailDto>>(Messages.MaintenanceTime);
+            }
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(x => x.ColorId == colorId));
+        }
+
+        [CacheAspect]
+        public IDataResult<List<CarDetailDto>> GetCarDetailsByModelYear(int min, int max)
+        {
+            if (DateTime.Now.Hour == 6)
+            {
+                return new ErrorDataResult<List<CarDetailDto>>(Messages.MaintenanceTime);
+            }
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(m => m.ModelYear >= min && m.ModelYear <= max));
+        }
+
+        public IDataResult<List<CarDetailDto>> GetCarDetailsByCarId(int carId)
+        {
+            if (DateTime.Now.Hour == 6)
+            {
+                return new ErrorDataResult<List<CarDetailDto>>(Messages.MaintenanceTime);
+            }
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(m => m.Id == carId));
         }
 
         [SecuredOperation("admin")]

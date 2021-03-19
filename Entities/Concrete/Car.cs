@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using System.Collections.Generic;
+using Core.Entities;
 
 namespace Entities.Concrete
 {

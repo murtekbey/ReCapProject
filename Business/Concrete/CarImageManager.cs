@@ -1,5 +1,4 @@
 ﻿using Business.Abstract;
-using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
@@ -27,7 +26,7 @@ namespace Business.Concrete
             _carImageDal = carImageDal;
         }
 
-        [SecuredOperation("admin")]
+        //[SecuredOperation("admin")]
         [ValidationAspect(typeof(CarImageValidator))]
         [TransactionScopeAspect]
         [CacheRemoveAspect("ICarImageService.Get")]
@@ -43,23 +42,23 @@ namespace Business.Concrete
                 return result;
             }
 
-            var newImage = FileHelper.Add(carImageCreationDto.ImagePath, carImageCreationDto.File);
             var carImage = new CarImage
             {
                 CarId = carImageCreationDto.CarId,
                 Date = carImageCreationDto.Date,
-                ImagePath = carImageCreationDto.ImagePath + newImage
+                ImagePath = FileHelper.Add(carImageCreationDto.File)
             };
             _carImageDal.Add(carImage);
             return new SuccessResult(Messages.CarImageAdded);
         }
 
-        [SecuredOperation("admin")]
+        //[SecuredOperation("admin")]
         [CacheRemoveAspect("ICarImageService.Get")]
         public IResult Delete(CarImageCreationDto carImageCreationDto)
         {
+            var oldpath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\wwwroot")) + _carImageDal.Get(p => p.Id == carImageCreationDto.Id).ImagePath;
             var carImage = _carImageDal.Get(x => x.Id == carImageCreationDto.Id);
-            var result = BusinessRules.Run(FileHelper.Delete(carImage.ImagePath));
+            var result = BusinessRules.Run(FileHelper.Delete(oldpath));
 
             if (result != null)
             {
@@ -74,7 +73,7 @@ namespace Business.Concrete
         [CacheAspect]
         public IDataResult<List<CarImage>> GetAll()
         {
-            if (DateTime.Now.Hour == 00)
+            if (DateTime.Now.Hour == 6)
             {
                 return new ErrorDataResult<List<CarImage>>(Messages.MaintenanceTime);
             }
@@ -85,7 +84,7 @@ namespace Business.Concrete
         [CacheAspect]
         public IDataResult<CarImage> GetById(int carImageId)
         {
-            if (DateTime.Now.Hour == 00)
+            if (DateTime.Now.Hour == 6)
             {
                 return new ErrorDataResult<CarImage>(Messages.MaintenanceTime);
             }
@@ -104,7 +103,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll(p => p.CarId == carId));
         }
 
-        [SecuredOperation("admin")]
+        //[SecuredOperation("admin")]
         [ValidationAspect(typeof(CarImageValidator))]
         [TransactionScopeAspect]
         [CacheRemoveAspect("ICarImageService.Get")]
@@ -117,14 +116,13 @@ namespace Business.Concrete
                 return result;
             }
 
-            string oldPath = _carImageDal.Get(p => p.Id == carImageCreationDto.Id).ImagePath;
-            var newImage = FileHelper.Update(oldPath, carImageCreationDto.ImagePath, carImageCreationDto.File);
+            string oldPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\wwwroot")) + _carImageDal.Get(p => p.Id == carImageCreationDto.Id).ImagePath;
             var carImage = new CarImage
             {
                 Id = carImageCreationDto.Id,
                 CarId = carImageCreationDto.CarId,
                 Date = DateTime.Now,
-                ImagePath = carImageCreationDto.ImagePath + newImage
+                ImagePath = FileHelper.Update(oldPath, carImageCreationDto.File)
             };
             _carImageDal.Update(carImage);
             return new SuccessResult(Messages.CarImageUpdated);
@@ -142,11 +140,12 @@ namespace Business.Concrete
 
         private IDataResult<List<CarImage>> CheckIfPhotosExistsForCar(int carId)
         {
+            string path = @"\Images\no-image.png";
             var result = _carImageDal.GetAll(c => c.CarId == carId).Any();
             if (!result)
             {
                 return new ErrorDataResult<List<CarImage>>(new List<CarImage> 
-                { new CarImage {ImagePath = "..\\..\\..\\wwwroot\\images\\logo.png"} }
+                { new CarImage {ImagePath = path} }
                 ); 
             }
             return new SuccessDataResult<List<CarImage>>();

@@ -42,7 +42,7 @@ namespace Business.Concrete
         [CacheAspect]
         public IDataResult<List<Brand>> GetAll()
         {
-            if (DateTime.Now.Hour == 00)
+            if (DateTime.Now.Hour == 6)
             {
                 return new ErrorDataResult<List<Brand>>(Messages.MaintenanceTime);
             }
@@ -53,7 +53,7 @@ namespace Business.Concrete
         [CacheAspect]
         public IDataResult<Brand> GetById(int id)
         {
-            if (DateTime.Now.Hour == 00)
+            if (DateTime.Now.Hour == 6)
             {
                 return new ErrorDataResult<Brand>(Messages.MaintenanceTime);
             }

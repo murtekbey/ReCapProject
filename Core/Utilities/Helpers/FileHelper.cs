@@ -7,46 +7,47 @@ namespace Core.Utilities.Helpers
 {
     public class FileHelper
     {
-        public static string Add(string path, IFormFile file)
+        public static string Add(IFormFile file)
         {
+            var result = newPath(file);
             try
             {
-                string newFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                var sourcePath = Path.GetTempFileName();
+                if (file.Length > 0)
+                    using (var stream = new FileStream(sourcePath, FileMode.Create))
+                        file.CopyTo(stream);
 
-                using (FileStream fileStream = System.IO.File.Create(path + newFileName))
-                {
-                    file.CopyTo(fileStream);
-                    fileStream.Flush();
-                }
-
-                return newFileName;
+                File.Move(sourcePath, result.newPath);
             }
             catch (Exception exception)
             {
                 return exception.Message;
             }
+
+            return result.Path2;
         }
 
-        public static string Update(string oldPath, string newPath, IFormFile file)
+        public static string Update(string sourcePath, IFormFile file)
         {
+            var result = newPath(file);
             try
             {
-                string newFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-
-                using (FileStream fileStream = System.IO.File.Create(newPath + newFileName))
+                if (sourcePath.Length > 0)
                 {
-                    file.CopyTo(fileStream);
-                    fileStream.Flush();
+                    using (var stream = new FileStream(result.newPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
                 }
 
-                File.Delete(oldPath);
-
-                return newFileName;
+                File.Delete(sourcePath);
             }
             catch (Exception exception)
             {
                 return exception.Message;
             }
+
+            return result.Path2;
         }
 
         public static IResult Delete(string path)
@@ -61,6 +62,24 @@ namespace Core.Utilities.Helpers
             }
 
             return new SuccessResult();
+        }
+
+        public static (string newPath, string Path2) newPath(IFormFile file)
+        {
+            FileInfo ff = new FileInfo(file.FileName);
+            string fileExtension = ff.Extension;
+
+            var creatingUniqueFilename = Guid.NewGuid().ToString("N")
+                                         + "_" + DateTime.Now.Month + "_"
+                                         + DateTime.Now.Day + "_"
+                                         + DateTime.Now.Year + fileExtension;
+
+
+            string path = Environment.CurrentDirectory + @"\wwwroot\Images";
+
+            string result = $@"{path}\{creatingUniqueFilename}";
+
+            return (result, $"\\Images\\{creatingUniqueFilename}");
         }
     }
 }

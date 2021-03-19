@@ -10,12 +10,10 @@ namespace WebAPI.Controllers
     public class CarImagesController : ControllerBase
     {
         ICarImageService _carImageService;
-        public static IWebHostEnvironment _webHostEnvironment;
 
-        public CarImagesController(ICarImageService carImageService, IWebHostEnvironment webHostEnvironment)
+        public CarImagesController(ICarImageService carImageService)
         {
             _carImageService = carImageService;
-            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -43,7 +41,6 @@ namespace WebAPI.Controllers
         [HttpPost("add")]
         public IActionResult Add([FromForm]CarImageCreationDto carImageCreationDto)
         {
-            carImageCreationDto.ImagePath = _webHostEnvironment.WebRootPath + "\\images\\";
             var result = _carImageService.Add(carImageCreationDto);
             if (result.Success)
             {
@@ -55,7 +52,6 @@ namespace WebAPI.Controllers
         [HttpPost("delete")]
         public IActionResult Delete([FromForm] CarImageCreationDto carImageCreationDto)
         {
-            carImageCreationDto.ImagePath = _webHostEnvironment.WebRootPath + "\\images\\";
             var result = _carImageService.Delete(carImageCreationDto);
             if (result.Success)
             {
@@ -67,7 +63,6 @@ namespace WebAPI.Controllers
         [HttpPost("update")]
         public IActionResult Update([FromForm] CarImageCreationDto carImageCreationDto)
         {
-            carImageCreationDto.ImagePath = _webHostEnvironment.WebRootPath + "\\images\\";
             var result = _carImageService.Update(carImageCreationDto);
             if (result.Success)
             {

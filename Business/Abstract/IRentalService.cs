@@ -1,9 +1,7 @@
 ﻿using Core.Utilities.Results;
 using Entities.Concrete;
 using Entities.DTOs;
-using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace Business.Abstract
 {
@@ -14,6 +12,9 @@ namespace Business.Abstract
         IResult Delete(Rental rental);
         IDataResult<List<Rental>> GetAll();
         IDataResult<Rental> GetById(int rentalId);
-        IDataResult<List<RentalDetailDto>> GetRentalDetails(Expression<Func<Rental, bool>> filter = null);
+        IResult DeliverCar(Rental rental);
+        IDataResult<List<RentalDetailDto>> GetRentalDetails();
+        IDataResult<List<RentalDetailDto>> GetUndeliveredRentalDetails();
+        IDataResult<List<RentalDetailDto>> GetDeliveredRentalDetails();
     }
 }

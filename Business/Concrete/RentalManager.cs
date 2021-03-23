@@ -11,6 +11,7 @@ using Entities.Concrete;
 using Entities.DTOs;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Business.Concrete
@@ -24,12 +25,12 @@ namespace Business.Concrete
             _rentalDal = rentalDal;
         }
 
-        [SecuredOperation("admin")]
+        //[SecuredOperation("admin")]
         [ValidationAspect(typeof(RentalValidator))]
         [CacheRemoveAspect("IRentalService.Get")]
         public IResult Add(Rental rental)
         {
-            IResult result = BusinessRules.Run(CheckIfNoReturnDate(rental));
+            IResult result = BusinessRules.Run(CheckIfCarNoReturnDate(rental.CarId));
 
             if (result != null)
             {
@@ -40,7 +41,17 @@ namespace Business.Concrete
             return new SuccessResult(Messages.RentalAdded);
         }
 
-        [SecuredOperation("admin")]
+        //[SecuredOperation("admin")]
+        [ValidationAspect(typeof(RentalValidator))]
+        [CacheRemoveAspect("IRentalService.Get")]
+        public IResult Update(Rental rental)
+        {
+            _rentalDal.Update(rental);
+            return new SuccessResult(Messages.RentalUpdated);
+        }
+
+
+        //[SecuredOperation("admin")]
         [CacheRemoveAspect("IRentalService.Get")]
         public IResult Delete(Rental rental)
         {
@@ -52,7 +63,7 @@ namespace Business.Concrete
         [CacheAspect]
         public IDataResult<List<Rental>> GetAll()
         {
-            if (DateTime.Now.Hour == 00)
+            if (DateTime.Now.Hour == 8)
             {
                 return new ErrorDataResult<List<Rental>>(Messages.MaintenanceTime);
             }
@@ -61,49 +72,71 @@ namespace Business.Concrete
 
         //[SecuredOperation("user,admin")]
         [CacheAspect]
-        public IDataResult<Rental> GetById(int id)
+        public IDataResult<Rental> GetById(int rentalId)
         {
-            if (DateTime.Now.Hour == 00)
+            if (DateTime.Now.Hour == 8)
             {
                 return new ErrorDataResult<Rental>(Messages.MaintenanceTime);
             }
-            return new SuccessDataResult<Rental>(_rentalDal.Get(b => b.Id == id));
+            return new SuccessDataResult<Rental>(_rentalDal.Get(b => b.RentalId == rentalId));
+        }
+
+        [CacheRemoveAspect("IRentalService.Get")]
+        public IResult DeliverCar(Rental rental)
+        {
+            var result = BusinessRules.Run(CheckIfCarAlreadyDelivered(rental.RentalId));
+            if (result != null)
+            {
+                return result;
+            }
+
+            Rental updatedCar = _rentalDal.Get(x => x.RentalId == rental.RentalId);
+            updatedCar.ReturnDate = rental.ReturnDate;
+            _rentalDal.Update(updatedCar);
+            return new SuccessResult(Messages.CarDelivered);
         }
 
         //[SecuredOperation("user,admin")]
         [CacheAspect]
-        public IDataResult<List<RentalDetailDto>> GetRentalDetails(Expression<Func<Rental, bool>> filter = null)
+        public IDataResult<List<RentalDetailDto>> GetRentalDetails()
         {
-            if (DateTime.Now.Hour == 00)
+            if (DateTime.Now.Hour == 8)
             {
                 return new ErrorDataResult<List<RentalDetailDto>>(Messages.MaintenanceTime);
             }
             return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalDetails());
         }
 
-        [SecuredOperation("admin")]
-        [ValidationAspect(typeof(RentalValidator))]
-        [CacheRemoveAspect("IRentalService.Get")]
-        public IResult Update(Rental rental)
+        public IDataResult<List<RentalDetailDto>> GetUndeliveredRentalDetails()
         {
-            IResult result = BusinessRules.Run(CheckIfNoReturnDate(rental));
-
-            if (result != null)
+            if (DateTime.Now.Hour == 8)
             {
-                return result;
+                return new ErrorDataResult<List<RentalDetailDto>>(Messages.MaintenanceTime);
             }
-
-            _rentalDal.Update(rental);
-            return new SuccessResult(Messages.RentalUpdated);
+            return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalDetails(r => r.ReturnDate == null));
         }
 
-        private IResult CheckIfNoReturnDate(Rental rental)
+        public IDataResult<List<RentalDetailDto>> GetDeliveredRentalDetails()
         {
-            var result = _rentalDal.GetRentalDetails(I => I.CarId == rental.CarId).Count;
-            if (result > 0)
+            if (DateTime.Now.Hour == 8)
             {
-                return new ErrorResult(Messages.NoReturnDate);
+                return new ErrorDataResult<List<RentalDetailDto>>(Messages.MaintenanceTime);
             }
+            return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalDetails(r => r.ReturnDate != null));
+        }
+
+        //Business Rules
+        private IResult CheckIfCarNoReturnDate(int carId)
+        {
+            if (_rentalDal.Get(x => x.CarId == carId && x.ReturnDate == null) != null)
+                return new ErrorResult(Messages.NoReturnDate);
+            return new SuccessResult();
+        }
+
+        private IResult CheckIfCarAlreadyDelivered(int rentalId)
+        {
+            if (_rentalDal.Get(x => x.RentalId == rentalId && x.ReturnDate == null) == null)
+                return new ErrorResult(Messages.CarAlreadyDelivered);
             return new SuccessResult();
         }
     }

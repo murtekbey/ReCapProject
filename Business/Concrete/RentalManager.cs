@@ -1,5 +1,4 @@
 ﻿using Business.Abstract;
-using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
@@ -12,7 +11,7 @@ using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
+using Core.Aspects.Autofac.Transaction;
 
 namespace Business.Concrete
 {
@@ -27,10 +26,11 @@ namespace Business.Concrete
 
         //[SecuredOperation("admin")]
         [ValidationAspect(typeof(RentalValidator))]
+        [TransactionScopeAspect]
         [CacheRemoveAspect("IRentalService.Get")]
         public IResult Add(Rental rental)
         {
-            IResult result = BusinessRules.Run(CheckIfCarNoReturnDate(rental.CarId));
+            IResult result = BusinessRules.Run(IsCarCanBeRented(rental));
 
             if (result != null)
             {
@@ -81,6 +81,12 @@ namespace Business.Concrete
             return new SuccessDataResult<Rental>(_rentalDal.Get(b => b.RentalId == rentalId));
         }
 
+        [CacheAspect]
+        public IDataResult<List<Rental>> GetByCarId(int carId)
+        {
+            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(rental => rental.CarId == carId));
+        }
+
         [CacheRemoveAspect("IRentalService.Get")]
         public IResult DeliverCar(Rental rental)
         {
@@ -125,11 +131,30 @@ namespace Business.Concrete
             return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalDetails(r => r.ReturnDate != null));
         }
 
-        //Business Rules
-        private IResult CheckIfCarNoReturnDate(int carId)
+        public IDataResult<List<RentalDetailDto>> GetRentalDetailsByRentalId(int rentalId)
         {
-            if (_rentalDal.Get(x => x.CarId == carId && x.ReturnDate == null) != null)
-                return new ErrorResult(Messages.NoReturnDate);
+            if (DateTime.Now.Hour == 8)
+            {
+                return new ErrorDataResult<List<RentalDetailDto>>(Messages.MaintenanceTime);
+            }
+            return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalDetails(m => m.RentalId == rentalId));
+        }
+
+        //Business Rules
+        private IResult IsCarCanBeRented(Rental rental)
+        {
+            var result = GetByCarId(rental.CarId).Data.LastOrDefault();
+            if (result != null)
+            {
+                if (rental.RentDate >= result.RentDate && rental.RentDate <= result.ReturnDate)
+                {
+                    return new ErrorResult("Bu tarihler arasında araç daha önce kiralanmış");
+                }
+                if (rental.RentDate > rental.ReturnDate)
+                {
+                    return new ErrorResult("Kiralama tarihi dönüş tarihinden büyük olamaz");
+                }
+            }
             return new SuccessResult();
         }
 

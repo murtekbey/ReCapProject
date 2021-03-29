@@ -22,6 +22,12 @@ $ dotnet restore
 ```
 
 ### Latest Updates - *Son Güncellemeler*
+- 29 March 2021
+	- Payment Service is added. *(Ödeme servisi eklendi.)*
+	- Some business rules are refactored. *(Bazı iş kuralları yeniden düzenlendi.)*
+	- Implementation of Angular SPA is added.  *(Angular eklendi.)*
+	(You can check here. [ReCapProject-SPA](https://github.com/murtekbey/ReCapProject-SPA) *(Linkden Angular projesine ulaşabilirsiniz.)
+
 - 04 March 2021
 	- Cache is added.
 	- Transaction is added.

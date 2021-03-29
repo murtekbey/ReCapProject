@@ -44,6 +44,17 @@ CREATE TABLE CarImages (
     FOREIGN KEY (CarId) REFERENCES Cars(Id)
 );
 
+CREATE TABLE [dbo].[Payments] (
+    [PaymentId]   INT          IDENTITY (1, 1) NOT NULL,
+    [CustomerId]  INT          NOT NULL,
+    [CarId]       INT          NOT NULL,
+    [Amount]      DECIMAL (18) NOT NULL,
+    [PaymentDate] DATE         NOT NULL,
+    PRIMARY KEY CLUSTERED ([PaymentId] ASC),
+    FOREIGN KEY ([CustomerId]) REFERENCES [dbo].[Customers] ([Id]),
+    FOREIGN KEY ([CarId]) REFERENCES [dbo].[Cars] ([Id])
+);
+
 CREATE TABLE [dbo].[Users] (
     [Id]           INT             IDENTITY (1, 1) NOT NULL,
     [FirstName]    VARCHAR (50)    NOT NULL,

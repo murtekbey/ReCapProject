@@ -10,7 +10,7 @@ namespace Entities.DTOs
         {
             Date = DateTime.Now;
         }
-        public int Id { get; set; }
+        public int CarImageId { get; set; }
         public int CarId { get; set; }
         public string ImagePath { get; set; }
         public IFormFile File { get; set; }

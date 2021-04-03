@@ -31,7 +31,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CarAdded);
         }
 
-        [SecuredOperation("admin")]
+        //[SecuredOperation("admin")]
         [CacheRemoveAspect("ICarService.Get")]
         public IResult Delete(Car car)
         {
@@ -59,7 +59,7 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<Car>(Messages.MaintenanceTime);
             }
-            return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == carId));
+            return new SuccessDataResult<Car>(_carDal.Get(c => c.CarId == carId));
         }
 
         //[SecuredOperation("user,admin")]
@@ -103,15 +103,17 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(m => m.ModelYear >= min && m.ModelYear <= max));
         }
 
+        [CacheAspect]
         public IDataResult<List<CarDetailDto>> GetCarDetailsByCarId(int carId)
         {
             if (DateTime.Now.Hour == 6)
             {
                 return new ErrorDataResult<List<CarDetailDto>>(Messages.MaintenanceTime);
             }
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(m => m.Id == carId));
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(m => m.CarId == carId));
         }
 
+        [CacheAspect]
         public IDataResult<List<CarDetailDto>> GetCarDetailsByColorAndBrand(int colorId, int brandId)
         {
             return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.ColorId == colorId && c.BrandId == brandId));

@@ -52,13 +52,13 @@ namespace Business.Concrete
 
         //[SecuredOperation("user,admin")]
         [CacheAspect]
-        public IDataResult<Color> GetById(int id)
+        public IDataResult<Color> GetById(int colorId)
         {
             if (DateTime.Now.Hour == 6)
             {
                 return new ErrorDataResult<Color>(Messages.MaintenanceTime);
             }
-            return new SuccessDataResult<Color>(_colorDal.Get(c => c.ColorId == id));
+            return new SuccessDataResult<Color>(_colorDal.Get(c => c.ColorId == colorId));
         }
 
         //[SecuredOperation("admin")]

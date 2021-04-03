@@ -1,4 +1,37 @@
-﻿CREATE TABLE Colors(
+﻿CREATE TABLE [dbo].[Users] (
+    [UserId]           INT             IDENTITY (1, 1) NOT NULL,
+    [FirstName]    VARCHAR (50)    NOT NULL,
+    [LastName]     VARCHAR (50)    NOT NULL,
+    [Email]        VARCHAR (50)    NOT NULL,
+    [PasswordHash] VARBINARY (500) NOT NULL,
+    [PasswordSalt] VARBINARY (500) NOT NULL,
+    [Status]       BIT             NOT NULL,
+    PRIMARY KEY CLUSTERED ([UserId] ASC)
+);
+
+CREATE TABLE [dbo].[OperationClaims] (
+    [OperationClaimId]   INT           IDENTITY (1, 1) NOT NULL,
+    [Name] VARCHAR (250) NOT NULL,
+    PRIMARY KEY CLUSTERED ([OperationClaimId] ASC)
+);
+
+CREATE TABLE [dbo].[UserOperationClaims] (
+    [UserOperationClaimId]               INT IDENTITY (1, 1) NOT NULL,
+    [UserId]           INT NOT NULL,
+    [OperationClaimId] INT NOT NULL,
+    PRIMARY KEY CLUSTERED ([UserOperationClaimId] ASC),
+    FOREIGN KEY ([OperationClaimId]) REFERENCES [dbo].[OperationClaims] ([OperationClaimId]),
+    FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([UserId])
+);
+
+CREATE TABLE Customers(
+    CustomerId INT PRIMARY KEY IDENTITY (1, 1) NOT NULL,
+    UserId INT UNIQUE NOT NULL,
+    CompanyName NVARCHAR (100) NOT NULL,
+    FOREIGN KEY (UserId) REFERENCES Users(UserId)
+);
+
+CREATE TABLE Colors(
 	ColorId INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
 	ColorName NVARCHAR (50) NOT NULL,
 );
@@ -9,7 +42,7 @@ CREATE TABLE Brands(
 );
 
 CREATE TABLE Cars(
-	CarID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+	CarId INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
 	BrandId INT NOT NULL,
 	ColorId INT NOT NULL,
 	ModelYear INT NOT NULL,
@@ -19,29 +52,24 @@ CREATE TABLE Cars(
 	FOREIGN KEY (BrandID) REFERENCES Brands(BrandID)
 );
 
-CREATE TABLE Customers(
-    Id INT PRIMARY KEY IDENTITY (1, 1) NOT NULL,
-    UserId INT UNIQUE NOT NULL,
-    CompanyName NVARCHAR (100) NOT NULL,
-    FOREIGN KEY (UserId) REFERENCES Users(Id)
-);
-
 CREATE TABLE Rentals(
-    Id INT PRIMARY KEY IDENTITY (1, 1) NOT NULL,
+    RentalId INT PRIMARY KEY IDENTITY (1, 1) NOT NULL,
     CarId INT  NOT NULL,
     CustomerId INT  NOT NULL,
     RentDate DATE NOT NULL,
     ReturnDate DATE NULL,
-    FOREIGN KEY (CarId) REFERENCES Cars(Id),
-    FOREIGN KEY (CustomerId) REFERENCES Customers(UserId)
+    FOREIGN KEY (CarId) REFERENCES Cars(CarId),
+    FOREIGN KEY (CustomerId) REFERENCES Customers(CustomerId)
 );
 
-CREATE TABLE CarImages (
-    Id INT PRIMARY KEY IDENTITY (1, 1) NOT NULL,
-    CarId INT NOT NULL,
-    ImagePath NVARCHAR (MAX) NOT NULL,
-    Date DATE NOT NULL,
-    FOREIGN KEY (CarId) REFERENCES Cars(Id)
+CREATE TABLE [dbo].[CarImages] (
+    [CarImageId] INT            IDENTITY (1, 1) NOT NULL,
+    [CarId]      INT            NOT NULL,
+    [ImagePath]  NVARCHAR (MAX) NOT NULL,
+    [Date]       DATE           NOT NULL,
+    [IsMain] BIT NOT NULL, 
+    PRIMARY KEY CLUSTERED ([CarImageId] ASC),
+    FOREIGN KEY ([CarId]) REFERENCES [dbo].[Cars] ([CarId])
 );
 
 CREATE TABLE [dbo].[Payments] (
@@ -51,32 +79,6 @@ CREATE TABLE [dbo].[Payments] (
     [Amount]      DECIMAL (18) NOT NULL,
     [PaymentDate] DATE         NOT NULL,
     PRIMARY KEY CLUSTERED ([PaymentId] ASC),
-    FOREIGN KEY ([CustomerId]) REFERENCES [dbo].[Customers] ([Id]),
-    FOREIGN KEY ([CarId]) REFERENCES [dbo].[Cars] ([Id])
-);
-
-CREATE TABLE [dbo].[Users] (
-    [Id]           INT             IDENTITY (1, 1) NOT NULL,
-    [FirstName]    VARCHAR (50)    NOT NULL,
-    [LastName]     VARCHAR (50)    NOT NULL,
-    [Email]        VARCHAR (50)    NOT NULL,
-    [PasswordHash] VARBINARY (500) NOT NULL,
-    [PasswordSalt] VARBINARY (500) NOT NULL,
-    [Status]       BIT             NOT NULL,
-    PRIMARY KEY CLUSTERED ([Id] ASC)
-);
-
-CREATE TABLE [dbo].[OperationClaims] (
-    [Id]   INT           IDENTITY (1, 1) NOT NULL,
-    [Name] VARCHAR (250) NOT NULL,
-    PRIMARY KEY CLUSTERED ([Id] ASC)
-);
-
-CREATE TABLE [dbo].[UserOperationClaims] (
-    [Id]               INT IDENTITY (1, 1) NOT NULL,
-    [UserId]           INT NOT NULL,
-    [OperationClaimId] INT NOT NULL,
-    PRIMARY KEY CLUSTERED ([Id] ASC),
-    FOREIGN KEY ([OperationClaimId]) REFERENCES [dbo].[OperationClaims] ([Id]),
-    FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([Id])
+    FOREIGN KEY ([CustomerId]) REFERENCES [dbo].[Customers] ([CustomerId]),
+    FOREIGN KEY ([CarId]) REFERENCES [dbo].[Cars] ([CarId])
 );

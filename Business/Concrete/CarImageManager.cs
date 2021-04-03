@@ -30,6 +30,7 @@ namespace Business.Concrete
         [ValidationAspect(typeof(CarImageValidator))]
         [TransactionScopeAspect]
         [CacheRemoveAspect("ICarImageService.Get")]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Add(CarImageCreationDto carImageCreationDto)
         {
             IResult result = BusinessRules.Run(
@@ -54,10 +55,11 @@ namespace Business.Concrete
 
         //[SecuredOperation("admin")]
         [CacheRemoveAspect("ICarImageService.Get")]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Delete(CarImageCreationDto carImageCreationDto)
         {
-            var oldpath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\wwwroot")) + _carImageDal.Get(p => p.Id == carImageCreationDto.Id).ImagePath;
-            var carImage = _carImageDal.Get(x => x.Id == carImageCreationDto.Id);
+            var oldpath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\wwwroot")) + _carImageDal.Get(p => p.CarImageId == carImageCreationDto.CarImageId).ImagePath;
+            var carImage = _carImageDal.Get(x => x.CarImageId == carImageCreationDto.CarImageId);
             var result = BusinessRules.Run(FileHelper.Delete(oldpath));
 
             if (result != null)
@@ -88,7 +90,7 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<CarImage>(Messages.MaintenanceTime);
             }
-            return new SuccessDataResult<CarImage>(_carImageDal.Get(c => c.Id == carImageId));
+            return new SuccessDataResult<CarImage>(_carImageDal.Get(c => c.CarImageId == carImageId));
         }
 
         //[SecuredOperation("user,admin")]
@@ -107,6 +109,7 @@ namespace Business.Concrete
         [ValidationAspect(typeof(CarImageValidator))]
         [TransactionScopeAspect]
         [CacheRemoveAspect("ICarImageService.Get")]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Update(CarImageCreationDto carImageCreationDto)
         {
             IResult result = BusinessRules.Run(CheckIfFileExtensionCorrect(carImageCreationDto.File.FileName));
@@ -116,10 +119,10 @@ namespace Business.Concrete
                 return result;
             }
 
-            string oldPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\wwwroot")) + _carImageDal.Get(p => p.Id == carImageCreationDto.Id).ImagePath;
+            string oldPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\wwwroot")) + _carImageDal.Get(p => p.CarImageId == carImageCreationDto.CarImageId).ImagePath;
             var carImage = new CarImage
             {
-                Id = carImageCreationDto.Id,
+                CarImageId = carImageCreationDto.CarImageId,
                 CarId = carImageCreationDto.CarId,
                 Date = DateTime.Now,
                 ImagePath = FileHelper.Update(oldPath, carImageCreationDto.File)

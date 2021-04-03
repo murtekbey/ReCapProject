@@ -51,13 +51,13 @@ namespace Business.Concrete
 
         //[SecuredOperation("user,admin")]
         [CacheAspect]
-        public IDataResult<Customer> GetById(int id)
+        public IDataResult<Customer> GetById(int customerId)
         {
             if (DateTime.Now.Hour == 00)
             {
                 return new ErrorDataResult<Customer>(Messages.MaintenanceTime);
             }
-            return new SuccessDataResult<Customer>(_customerDal.Get(b => b.UserId == id));
+            return new SuccessDataResult<Customer>(_customerDal.Get(b => b.CustomerId == customerId));
         }
 
         [SecuredOperation("admin")]

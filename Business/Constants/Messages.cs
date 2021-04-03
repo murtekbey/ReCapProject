@@ -60,5 +60,15 @@
         public static string PaymentListed = "Ödemeler listelendi";
         public static string PaymentUpdated = "Ödeme güncellendi";
         public static string PaymentFailure = "Ödeme işleminde hata oluştu.";
+
+        public static string CreditCardAdded = "Kredi kartı eklendi.";
+        public static string CreditCardDeleted = "Kredi kartı silindi.";
+        public static string CreditCardUpdated = "Kredi kartı güncellendi.";
+        public static string CreditCardListed = "Kredi kartları listelendi.";
+
+        public static string FindeksScoreAdded = "Findeks skoru eklendi.";
+        public static string FindeksScoreDeleted = "Findeks skoru silindi.";
+        public static string FindeksScoreUpdated = "Findeks skoru güncellendi.";
+        public static string FindeksScoreListed = "Findeks skorları listelendi.";
     }
 }

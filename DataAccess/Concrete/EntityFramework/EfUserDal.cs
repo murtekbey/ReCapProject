@@ -1,8 +1,11 @@
 ﻿using Core.DataAccess.EntityFramework;
 using Core.Entities.Concrete;
 using DataAccess.Abstract;
+using Entities.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace DataAccess.Concrete.EntityFramework
 {
@@ -22,6 +25,29 @@ namespace DataAccess.Concrete.EntityFramework
                                  Name = operationClaim.Name
                              };
                 return result.ToList();
+            }
+        }
+
+        public UserDetailDto GetUserDetails(Expression<Func<UserDetailDto, bool>> filter)
+        {
+            using (var context = new ReCapContext())
+            {
+                var result = from user in context.Users
+                             join customer in context.Customers
+                             on user.UserId equals customer.UserId
+                             join findeks in context.FindeksScores
+                             on customer.CustomerId equals findeks.CustomerId
+                             select new UserDetailDto
+                             {
+                                 UserId = user.UserId,
+                                 CustomerId = customer.CustomerId,
+                                 FirstName = user.FirstName,
+                                 LastName = user.LastName,
+                                 Email = user.Email,
+                                 CompanyName = customer.CompanyName,
+                                 FindeksScore = findeks.Score
+                             };
+                return result.SingleOrDefault(filter);
             }
         }
     }

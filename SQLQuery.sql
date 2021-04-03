@@ -24,11 +24,29 @@ CREATE TABLE [dbo].[UserOperationClaims] (
     FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([UserId])
 );
 
+CREATE TABLE [dbo].[CreditCard] (
+    [CreditCardId]       INT             IDENTITY (1, 1) NOT NULL,
+	[UserId]	INT NOT NULL,
+	[CardName]    VARCHAR (250)    NOT NULL,
+    [CardNumber]    VARCHAR (20)    NOT NULL,
+	[Cvv]    VARCHAR (10)    NOT NULL,
+    PRIMARY KEY CLUSTERED ([CreditCardId] ASC),
+	FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([UserId])
+);
+
 CREATE TABLE Customers(
     CustomerId INT PRIMARY KEY IDENTITY (1, 1) NOT NULL,
     UserId INT UNIQUE NOT NULL,
     CompanyName NVARCHAR (100) NOT NULL,
     FOREIGN KEY (UserId) REFERENCES Users(UserId)
+);
+
+CREATE TABLE [dbo].[Findeks] (
+    [FindeksId]		INT IDENTITY (1, 1) NOT NULL,
+    [CustomerId]	INT NOT NULL,
+    [Score] SMALLINT NOT NULL,
+    PRIMARY KEY CLUSTERED ([FindeksId] ASC),
+    FOREIGN KEY ([CustomerId]) REFERENCES [dbo].[Customers] ([CustomerId])
 );
 
 CREATE TABLE Colors(
@@ -41,15 +59,17 @@ CREATE TABLE Brands(
 	BrandName NVARCHAR (50) NOT NULL,
 );
 
-CREATE TABLE Cars(
-	CarId INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
-	BrandId INT NOT NULL,
-	ColorId INT NOT NULL,
-	ModelYear INT NOT NULL,
-	DailyPrice DECIMAL NOT NULL,
-	Descriptions NTEXT NULL,
-	FOREIGN KEY (ColorID) REFERENCES Colors(ColorID),
-	FOREIGN KEY (BrandID) REFERENCES Brands(BrandID)
+CREATE TABLE [dbo].[Cars] (
+    [CarId]       INT          IDENTITY (1, 1) NOT NULL,
+    [BrandId]     INT          NOT NULL,
+    [ColorId]     INT          NOT NULL,
+    [ModelYear]   INT          NOT NULL,
+    [DailyPrice]  DECIMAL (18) NOT NULL,
+    [Description] NTEXT        NULL,
+	[FindeksScore] SMALLINT NOT NULL,
+    PRIMARY KEY CLUSTERED ([CarId] ASC),
+    FOREIGN KEY ([ColorId]) REFERENCES [dbo].[Colors] ([ColorId]),
+    FOREIGN KEY ([BrandId]) REFERENCES [dbo].[Brands] ([BrandId])
 );
 
 CREATE TABLE Rentals(

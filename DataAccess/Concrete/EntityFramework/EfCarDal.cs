@@ -25,6 +25,7 @@ namespace DataAccess.Concrete.EntityFramework
                                  ColorName = co.ColorName,
                                  ModelYear = c.ModelYear,
                                  DailyPrice = c.DailyPrice,
+                                 FindeksScore = c.FindeksScore,
                                  Description = c.Description,
                                  Image = context.CarImages.Where(i => i.CarId == c.CarId).ToList()
                              };

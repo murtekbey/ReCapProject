@@ -2,6 +2,7 @@
 using Core.Utilities.Results;
 using Core.Utilities.Security.JWT;
 using Entities.DTOs;
+using System.Collections.Generic;
 
 namespace Business.Abstract
 {
@@ -11,5 +12,7 @@ namespace Business.Abstract
         IDataResult<User> Login(UserForLoginDto userForLoginDto);
         IResult UserExists(string email);
         IDataResult<AccessToken> CreateAccessToken(User user);
+        IResult UserDetailUpdate(UserDetailForUpdate userDetailForUpdate);
+        IResult IsAuthenticated(string userMail, List<string> requiredRoles);
     }
 }

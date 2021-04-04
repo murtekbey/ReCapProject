@@ -1,21 +1,27 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
+using Core.Aspects.Autofac.Transaction;
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using Core.Utilities.Security.Hashing;
 using Core.Utilities.Security.JWT;
 using Entities.DTOs;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Business.Concrete
 {
     public class AuthManager : IAuthService
     {
         IUserService _userService;
+        ICustomerService _customerService;
         ITokenHelper _tokenHelper;
 
-        public AuthManager(IUserService userService, ITokenHelper tokenHelper)
+        public AuthManager(IUserService userService, ITokenHelper tokenHelper, ICustomerService customerService)
         {
             _userService = userService;
+            _customerService = customerService;
             _tokenHelper = tokenHelper;
         }
 
@@ -24,6 +30,23 @@ namespace Business.Concrete
             var claims = _userService.GetClaims(user);
             var accessToken = _tokenHelper.CreateToken(user, claims);
             return new SuccessDataResult<AccessToken>(accessToken, Messages.AccessTokenCreated);
+        }
+
+        [SecuredOperation("user")]
+        public IResult IsAuthenticated(string userMail, List<string> requiredRoles)
+        {
+            if (requiredRoles != null)
+            {
+                var user = _userService.GetByMail(userMail);
+                var claims = _userService.GetClaims(user);
+                var result = requiredRoles.All(role => claims.Select(u => u.Name).Contains(role));
+                if (!result)
+                {
+                    return new ErrorResult(Messages.AuthorizationDenied);
+                }
+            }
+
+            return new SuccessResult();
         }
 
         public IDataResult<User> Login(UserForLoginDto userForLoginDto)
@@ -57,6 +80,33 @@ namespace Business.Concrete
             };
             _userService.Add(user);
             return new SuccessDataResult<User>(user, Messages.UserRegistered);
+        }
+
+        [TransactionScopeAspect]
+        public IResult UserDetailUpdate(UserDetailForUpdate userDetailForUpdate)
+        {
+            var user = _userService.GetById(userDetailForUpdate.UserId);
+            var customer = _customerService.GetById(userDetailForUpdate.CustomerId).Data;
+
+            if (!HashingHelper.VerifyPasswordHash(userDetailForUpdate.Password, user.PasswordHash, user.PasswordSalt))
+            {
+                return new ErrorResult(Messages.PasswordError);
+            }
+
+            if (!string.IsNullOrEmpty(userDetailForUpdate.NewPassword))
+            {
+                byte[] passwordHash, passwordSalt;
+                HashingHelper.CreatePasswordHash(userDetailForUpdate.NewPassword, out passwordHash, out passwordSalt);
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
+            }
+            user.FirstName = userDetailForUpdate.FirstName;
+            user.LastName = userDetailForUpdate.LastName;
+            customer.CompanyName = userDetailForUpdate.CompanyName;
+            _userService.Update(user);
+            _customerService.Update(customer);
+
+            return new SuccessResult(Messages.UserUpdated);
         }
 
         public IResult UserExists(string email)

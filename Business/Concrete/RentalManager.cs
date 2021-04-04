@@ -18,10 +18,14 @@ namespace Business.Concrete
     public class RentalManager : IRentalService
     {
         IRentalDal _rentalDal;
+        ICarService _carService;
+        IFindeksScoreService _findeksScoreService;
 
-        public RentalManager(IRentalDal rentalDal)
+        public RentalManager(IRentalDal rentalDal, ICarService carService, IFindeksScoreService findeksScoreService)
         {
             _rentalDal = rentalDal;
+            _carService = carService;
+            _findeksScoreService = findeksScoreService;
         }
 
         //[SecuredOperation("admin")]
@@ -30,7 +34,7 @@ namespace Business.Concrete
         [CacheRemoveAspect("IRentalService.Get")]
         public IResult Add(Rental rental)
         {
-            IResult result = BusinessRules.Run(IsCarCanBeRented(rental));
+            IResult result = BusinessRules.Run(IsCarCanBeRented(rental), CheckFindeksScore(rental));
 
             if (result != null)
             {
@@ -43,9 +47,17 @@ namespace Business.Concrete
 
         //[SecuredOperation("admin")]
         [ValidationAspect(typeof(RentalValidator))]
+        [TransactionScopeAspect]
         [CacheRemoveAspect("IRentalService.Get")]
         public IResult Update(Rental rental)
         {
+            IResult result = BusinessRules.Run(IsCarCanBeRented(rental), CheckFindeksScore(rental));
+
+            if (result != null)
+            {
+                return result;
+            }
+
             _rentalDal.Update(rental);
             return new SuccessResult(Messages.RentalUpdated);
         }
@@ -162,6 +174,23 @@ namespace Business.Concrete
         {
             if (_rentalDal.Get(x => x.RentalId == rentalId && x.ReturnDate == null) == null)
                 return new ErrorResult(Messages.CarAlreadyDelivered);
+            return new SuccessResult();
+        }
+
+        private IResult CheckFindeksScore(Rental rental)
+        {
+            var car = _carService.GetById(rental.CarId).Data;
+            var findeks = _findeksScoreService.GetByCustomerId(rental.CustomerId).Data;
+
+            if (findeks == null)
+            {
+                return new ErrorResult(Messages.FindeksScoreNotFound);
+            }
+
+            if (findeks.Score < car.FindeksScore)
+            {
+                return new ErrorResult(Messages.FindeksScoreInsufficient);
+            }
             return new SuccessResult();
         }
     }

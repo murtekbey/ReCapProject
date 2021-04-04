@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Entities.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace WebAPI.Controllers
 {
@@ -49,6 +50,30 @@ namespace WebAPI.Controllers
                 return BadRequest(result.Message);
             }
             return Ok(result);
+        }
+
+        [HttpPost("update")]
+        public ActionResult Update(UserDetailForUpdate userDetailForUpdate)
+        {
+            var result = _authService.UserDetailUpdate(userDetailForUpdate);
+            if (!result.Success)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok(result);
+        }
+
+        [HttpGet("isauthenticated")]
+        public ActionResult IsAuthenticated(string userMail, string requiredRoles)
+        {
+            var rolesList = !string.IsNullOrEmpty(requiredRoles)
+                ? requiredRoles.Split(',').ToList()
+                : null;
+
+            var result = _authService.IsAuthenticated(userMail, rolesList);
+            if (result.Success) return Ok(result);
+
+            return Unauthorized(result.Message);
         }
     }
 }

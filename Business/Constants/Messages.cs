@@ -70,5 +70,7 @@
         public static string FindeksScoreDeleted = "Findeks skoru silindi.";
         public static string FindeksScoreUpdated = "Findeks skoru güncellendi.";
         public static string FindeksScoreListed = "Findeks skorları listelendi.";
+        public static string FindeksScoreNotFound = "Findeks skoru bulunamadı.";
+        public static string FindeksScoreInsufficient = "Findeks skoru yetersiz.";
     }
 }

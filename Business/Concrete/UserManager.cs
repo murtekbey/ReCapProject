@@ -24,6 +24,11 @@ namespace Business.Concrete
             _userDal.Add(user);
         }
 
+        public void Delete(User user)
+        {
+            _userDal.Delete(user);
+        }
+
         public User GetById(int userId)
         {
             return _userDal.Get(u => u.UserId == userId);
@@ -39,9 +44,9 @@ namespace Business.Concrete
             return _userDal.GetClaims(user);
         }
 
-        public IDataResult<UserDetailDto> GetUserDetailByEmail(string email)
+        public IDataResult<UserDetailDto> GetUserDetailByEmail(string userEmail)
         {
-            var result = _userDal.Get(u => u.Email == email);
+            var result = _userDal.Get(u => u.Email == userEmail);
             return new SuccessDataResult<UserDetailDto>(_userDal.GetUserDetails(u => u.UserId == result.UserId));
         }
 

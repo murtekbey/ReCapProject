@@ -13,5 +13,6 @@ namespace Business.Abstract
         IResult Delete(FindeksScore findeksScore);
         IDataResult<List<FindeksScore>> GetAll();
         IDataResult<FindeksScore> GetById(int findeksScoreId);
+        IDataResult<FindeksScore> GetByCustomerId(int customerId);
     }
 }

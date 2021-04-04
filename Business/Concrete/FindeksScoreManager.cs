@@ -27,7 +27,8 @@ namespace Business.Concrete
         [CacheRemoveAspect("IFindeksScoreService.Get")]
         public IResult Add(FindeksScore findeksScore)
         {
-            _findeksScoreDal.Add(findeksScore);
+            var result = CreateFindeksScore(findeksScore).Data;
+            _findeksScoreDal.Add(result);
             return new SuccessResult(Messages.FindeksScoreAdded);
         }
 
@@ -50,6 +51,16 @@ namespace Business.Concrete
             return new SuccessDataResult<List<FindeksScore>>(_findeksScoreDal.GetAll(), Messages.FindeksScoreListed);
         }
 
+        public IDataResult<FindeksScore> GetByCustomerId(int customerId)
+        {
+            var findeks = _findeksScoreDal.Get(f => f.CustomerId == customerId);
+            if (findeks == null)
+            {
+                return new ErrorDataResult<FindeksScore>(Messages.FindeksScoreNotFound);
+            }
+            return new SuccessDataResult<FindeksScore>(findeks);
+        }
+
         [SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<FindeksScore> GetById(int findeksScoreId)
@@ -66,8 +77,16 @@ namespace Business.Concrete
         [CacheRemoveAspect("IFindeksScoreService.Get")]
         public IResult Update(FindeksScore findeksScore)
         {
-            _findeksScoreDal.Update(findeksScore);
+            var result = CreateFindeksScore(findeksScore).Data;
+            _findeksScoreDal.Update(result);
             return new SuccessResult(Messages.CreditCardUpdated);
+        }
+
+        private IDataResult<FindeksScore> CreateFindeksScore(FindeksScore findeks)
+        {
+            findeks.Score = new Random().Next(0, 1900);
+
+            return new SuccessDataResult<FindeksScore>(findeks);
         }
     }
 }

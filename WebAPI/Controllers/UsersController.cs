@@ -17,7 +17,7 @@ namespace WebAPI.Controllers
         [HttpGet("getuserdetailbymail")]
         public IActionResult GetUserDetailByMail(string userMail)
         {
-            var result = _userService.GetByMail(userMail);
+            var result = _userService.GetUserDetailByEmail(userMail);
             if (result != null)
             {
                 return Ok(result);

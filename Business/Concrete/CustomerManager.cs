@@ -21,7 +21,7 @@ namespace Business.Concrete
             _customerDal = customerDal;
         }
 
-        [SecuredOperation("admin")]
+        //[SecuredOperation("admin")]
         [ValidationAspect(typeof(CustomerValidator))]
         [CacheRemoveAspect("ICustomerService.Get")]
         public IResult Add(Customer customer)
@@ -49,6 +49,15 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(), Messages.CustomerListed);
         }
 
+        public IDataResult<Customer> GetByCompanyName(string companyName)
+        {
+            if (DateTime.Now.Hour == 00)
+            {
+                return new ErrorDataResult<Customer>(Messages.MaintenanceTime);
+            }
+            return new SuccessDataResult<Customer>(_customerDal.Get(b => b.CompanyName == companyName));
+        }
+
         //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<Customer> GetById(int customerId)
@@ -60,7 +69,7 @@ namespace Business.Concrete
             return new SuccessDataResult<Customer>(_customerDal.Get(b => b.CustomerId == customerId));
         }
 
-        [SecuredOperation("admin")]
+        //[SecuredOperation("admin")]
         [ValidationAspect(typeof(CustomerValidator))]
         [CacheRemoveAspect("ICustomerService.Get")]
         public IResult Update(Customer customer)

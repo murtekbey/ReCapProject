@@ -6,6 +6,7 @@ using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using Core.Utilities.Security.Hashing;
 using Core.Utilities.Security.JWT;
+using Entities.Concrete;
 using Entities.DTOs;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +17,15 @@ namespace Business.Concrete
     {
         IUserService _userService;
         ICustomerService _customerService;
+        IFindeksScoreService _findeksScoreService;
         ITokenHelper _tokenHelper;
 
-        public AuthManager(IUserService userService, ITokenHelper tokenHelper, ICustomerService customerService)
+        public AuthManager(IUserService userService, ITokenHelper tokenHelper, ICustomerService customerService, IFindeksScoreService findeksScoreService)
         {
             _userService = userService;
             _customerService = customerService;
             _tokenHelper = tokenHelper;
+            _findeksScoreService = findeksScoreService;
         }
 
         public IDataResult<AccessToken> CreateAccessToken(User user)
@@ -32,7 +35,7 @@ namespace Business.Concrete
             return new SuccessDataResult<AccessToken>(accessToken, Messages.AccessTokenCreated);
         }
 
-        [SecuredOperation("user")]
+        //[SecuredOperation("user")]
         public IResult IsAuthenticated(string userMail, List<string> requiredRoles)
         {
             if (requiredRoles != null)
@@ -65,6 +68,7 @@ namespace Business.Concrete
             return new SuccessDataResult<User>(userToCheck, Messages.SuccessfullLogin);
         }
 
+        [TransactionScopeAspect]
         public IDataResult<User> Register(UserForRegisterDto userForRegisterDto, string password)
         {
             byte[] passwordHash, passwordSalt;
@@ -79,6 +83,21 @@ namespace Business.Concrete
                 Status = true
             };
             _userService.Add(user);
+
+            var getUserId = _userService.GetByMail(userForRegisterDto.Email).UserId;
+            var customer = new Customer
+            {
+                UserId = getUserId,
+                CompanyName = userForRegisterDto.CompanyName
+            };
+            _customerService.Add(customer);
+
+            var getCustomerId = _customerService.GetByCompanyName(userForRegisterDto.CompanyName).Data.CustomerId;
+            var findeks = new FindeksScore
+            {
+                CustomerId = getCustomerId,
+            };
+            _findeksScoreService.Add(findeks);
             return new SuccessDataResult<User>(user, Messages.UserRegistered);
         }
 
@@ -88,7 +107,7 @@ namespace Business.Concrete
             var user = _userService.GetById(userDetailForUpdate.UserId);
             var customer = _customerService.GetById(userDetailForUpdate.CustomerId).Data;
 
-            if (!HashingHelper.VerifyPasswordHash(userDetailForUpdate.Password, user.PasswordHash, user.PasswordSalt))
+            if (!HashingHelper.VerifyPasswordHash(userDetailForUpdate.CurrentPassword, user.PasswordHash, user.PasswordSalt))
             {
                 return new ErrorResult(Messages.PasswordError);
             }

@@ -22,7 +22,7 @@ namespace Business.Concrete
             _findeksScoreDal = findeksScoreDal;
         }
 
-        [SecuredOperation("admin")]
+        //[SecuredOperation("admin")]
         [ValidationAspect(typeof(FindeksScoreValidator))]
         [CacheRemoveAspect("IFindeksScoreService.Get")]
         public IResult Add(FindeksScore findeksScore)

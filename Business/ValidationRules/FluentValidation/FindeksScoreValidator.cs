@@ -11,7 +11,6 @@ namespace Business.ValidationRules.FluentValidation
         public FindeksScoreValidator()
         {
             RuleFor(b => b.CustomerId).NotEmpty();
-            RuleFor(b => b.Score).ExclusiveBetween(0,1900);
         }
     }
 }

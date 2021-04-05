@@ -22,7 +22,7 @@ namespace Business.Concrete
             _creditCardDal = creditCardDal;
         }
 
-        [SecuredOperation("admin")]
+        //[SecuredOperation("admin")]
         [ValidationAspect(typeof(CreditCardValidator))]
         [CacheRemoveAspect("ICreditCardService.Get")]
         public IResult Add(CreditCard creditCard)
@@ -31,7 +31,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CreditCardAdded);
         }
 
-        [SecuredOperation("admin")]
+        //[SecuredOperation("admin")]
         [CacheRemoveAspect("ICreditCardService.Get")]
         public IResult Delete(CreditCard creditCard)
         {
@@ -39,7 +39,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CreditCardDeleted);
         }
 
-        [SecuredOperation("user,admin")]
+        //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<List<CreditCard>> GetAll()
         {
@@ -50,7 +50,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CreditCard>>(_creditCardDal.GetAll(), Messages.CreditCardListed);
         }
 
-        [SecuredOperation("user,admin")]
+        //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<CreditCard> GetById(int creditCardId)
         {
@@ -61,7 +61,7 @@ namespace Business.Concrete
             return new SuccessDataResult<CreditCard>(_creditCardDal.Get(b => b.CreditCardId == creditCardId));
         }
 
-        [SecuredOperation("user,admin")]
+        //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<CreditCard> GetByUserId(int userId)
         {
@@ -72,7 +72,7 @@ namespace Business.Concrete
             return new SuccessDataResult<CreditCard>(_creditCardDal.Get(b => b.UserId == userId));
         }
 
-        [SecuredOperation("admin")]
+        //[SecuredOperation("admin")]
         [ValidationAspect(typeof(CreditCardValidator))]
         [CacheRemoveAspect("ICreditCardService.Get")]
         public IResult Update(CreditCard creditCard)

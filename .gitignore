@@ -60,7 +60,7 @@ artifacts/
 StyleCopReport.xml
 
 # Files built by Visual Studio
-/Angular
+/Angular/
 **/*.jpg
 **/*.jpeg
 *.jpeg

@@ -50,6 +50,14 @@ namespace Business.Concrete
                 Date = carImageCreationDto.Date,
                 ImagePath = FileHelper.Add(carImageCreationDto.File)
             };
+
+            var anyImage = _carImageDal.GetAll(c => c.CarId == carImageCreationDto.CarId);
+
+            if (anyImage.Count == 0)
+            {
+                carImage.IsMain = true;
+            }
+
             _carImageDal.Add(carImage);
             return new SuccessResult(Messages.CarImageAdded);
         }

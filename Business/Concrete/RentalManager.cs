@@ -149,7 +149,6 @@ namespace Business.Concrete
             return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalDetails(m => m.RentalId == rentalId));
         }
 
-        //Business Rules
         public IResult IsCarCanBeRented(Rental rental)
         {
             var result = GetByCarId(rental.CarId).Data;

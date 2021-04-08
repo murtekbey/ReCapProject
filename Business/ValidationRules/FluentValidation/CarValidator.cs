@@ -1,5 +1,6 @@
 ﻿using Entities.Concrete;
 using FluentValidation;
+using System;
 
 namespace Business.ValidationRules.FluentValidation
 {
@@ -9,9 +10,10 @@ namespace Business.ValidationRules.FluentValidation
         {
             RuleFor(c => c.BrandId).NotEmpty();
             RuleFor(c => c.ColorId).NotEmpty();
-            RuleFor(c => c.DailyPrice).GreaterThan(0);
+            RuleFor(c => c.DailyPrice).GreaterThanOrEqualTo(100);
             RuleFor(c => c.ModelYear).GreaterThan(1950);
-            RuleFor(b => b.FindeksScore).ExclusiveBetween(0, 1900);
+            RuleFor(c => c.ModelYear).LessThan(DateTime.Now.Year);
+            RuleFor(b => b.FindeksScore).ExclusiveBetween(0, 1901);
         }
     }
 }

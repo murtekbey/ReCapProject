@@ -22,8 +22,17 @@ $ dotnet restore
 ```
 
 ### Latest Updates - *Son Güncellemeler*
+
+- 08 April 2021
+	- User Authorization and Authentication is added. (Kullanıcı yetkilendirme ve kimlik doğrulama eklendi.)
+	- User update service is added. _(Kullanıcı güncelleme servisi eklendi.)_
+	- During the rent, add a fake service that will query the customer's Findeks score. _(Kiralama esnasında müşterinin findeks puanını sorgulayacak sahte servis eklendi.)_
+	- Findex score requirement was imposed on cars. _(Araçlara findeks puanı zorunluluğu getirildi.)_
+	- Credit Card save system has been added. _(Kredi kartı kaydetme sistemi eklendi.)_
+	- Fake Payment service is added. _(Sahte ödeme servisi eklendi.)_
+	- Tested. Works smoothly. _(Test edildi. Sorunsuz bir şekilde çalışıyor.)_
+
 - 29 March 2021
-	- Payment Service is added. *(Ödeme servisi eklendi.)*
 	- Some business rules are refactored. *(Bazı iş kuralları yeniden düzenlendi.)*
 	- Implementation of Angular SPA is added.  *(Angular eklendi.)*
 	(You can check here. [ReCapProject-SPA](https://github.com/murtekbey/ReCapProject-SPA) *(Linkden Angular projesine ulaşabilirsiniz.)*

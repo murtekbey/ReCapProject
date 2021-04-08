@@ -10,10 +10,10 @@ namespace Business.ValidationRules.FluentValidation
     {
         public PaymentValidator()
         {
-            RuleFor(b => b.PaymentDate).NotNull();
-            RuleFor(x => x.CustomerId).NotNull();
-            RuleFor(x => x.CarId).NotNull();
-            RuleFor(x => x.Amount).GreaterThan(0);
+            RuleFor(b => b.PaymentDate).NotEmpty();
+            RuleFor(x => x.CustomerId).NotEmpty();
+            RuleFor(x => x.CarId).NotEmpty();
+            RuleFor(x => x.Amount).GreaterThanOrEqualTo(100);
         }
     }
 }

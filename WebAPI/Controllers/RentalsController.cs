@@ -126,5 +126,16 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+
+        [HttpPost("iscarcanberent")]
+        public IActionResult IsCarCanBeRented(Rental rental)
+        {
+            var result = _rentalService.IsCarCanBeRented(rental);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }

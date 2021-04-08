@@ -13,6 +13,6 @@ namespace Business.Abstract
         IResult UserExists(string email);
         IDataResult<AccessToken> CreateAccessToken(User user);
         IResult UserDetailUpdate(UserDetailForUpdate userDetailForUpdate);
-        IResult IsAuthenticated(string userMail, List<string> requiredRoles);
+        IResult IsAuthenticated(string email, List<string> roles);
     }
 }

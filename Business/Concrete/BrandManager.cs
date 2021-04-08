@@ -38,7 +38,6 @@ namespace Business.Concrete
             return new SuccessResult(Messages.BrandDeleted);
         }
 
-        //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<List<Brand>> GetAll()
         {
@@ -49,7 +48,6 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(), Messages.BrandListed);
         }
 
-        //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<Brand> GetById(int brandId)
         {

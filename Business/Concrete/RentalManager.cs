@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core.Aspects.Autofac.Transaction;
+using Business.BusinessAspects.Autofac;
 
 namespace Business.Concrete
 {
@@ -28,7 +29,6 @@ namespace Business.Concrete
             _findeksScoreService = findeksScoreService;
         }
 
-        //[SecuredOperation("admin")]
         [ValidationAspect(typeof(RentalValidator))]
         [TransactionScopeAspect]
         [CacheRemoveAspect("IRentalService.Get")]
@@ -45,7 +45,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.RentalAdded);
         }
 
-        //[SecuredOperation("admin")]
+        [SecuredOperation("admin")]
         [ValidationAspect(typeof(RentalValidator))]
         [TransactionScopeAspect]
         [CacheRemoveAspect("IRentalService.Get")]
@@ -63,7 +63,7 @@ namespace Business.Concrete
         }
 
 
-        //[SecuredOperation("admin")]
+        [SecuredOperation("admin")]
         [CacheRemoveAspect("IRentalService.Get")]
         public IResult Delete(Rental rental)
         {
@@ -71,7 +71,6 @@ namespace Business.Concrete
             return new SuccessResult(Messages.RentalDeleted);
         }
 
-        //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<List<Rental>> GetAll()
         {
@@ -82,7 +81,6 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(), Messages.RentalListed);
         }
 
-        //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<Rental> GetById(int rentalId)
         {
@@ -114,7 +112,6 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CarDelivered);
         }
 
-        //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<List<RentalDetailDto>> GetRentalDetails()
         {
@@ -153,18 +150,21 @@ namespace Business.Concrete
         }
 
         //Business Rules
-        private IResult IsCarCanBeRented(Rental rental)
+        public IResult IsCarCanBeRented(Rental rental)
         {
-            var result = GetByCarId(rental.CarId).Data.LastOrDefault();
+            var result = GetByCarId(rental.CarId).Data;
             if (result != null)
             {
-                if (rental.RentDate >= result.RentDate && rental.RentDate <= result.ReturnDate)
+                foreach (var rentalCar in result)
                 {
-                    return new ErrorResult("Bu tarihler arasında araç daha önce kiralanmış");
-                }
-                if (rental.RentDate > rental.ReturnDate)
-                {
-                    return new ErrorResult("Kiralama tarihi dönüş tarihinden büyük olamaz");
+                    if (rental.RentDate >= rentalCar.RentDate && rental.RentDate <= rentalCar.ReturnDate)
+                    {
+                        return new ErrorResult("Bu tarihler arasında araç daha önce kiralanmış");
+                    }
+                    if (rental.RentDate > rental.ReturnDate)
+                    {
+                        return new ErrorResult("Kiralama tarihi dönüş tarihinden büyük olamaz");
+                    }
                 }
             }
             return new SuccessResult();

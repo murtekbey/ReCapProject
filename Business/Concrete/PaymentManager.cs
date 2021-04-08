@@ -22,32 +22,10 @@ namespace Business.Concrete
             _paymentDal = paymentDal;
         }
 
-        //[SecuredOperation("admin")]
         [ValidationAspect(typeof(PaymentValidator))]
         [CacheRemoveAspect("IPaymentService.Get")]
         public IResult Add(Payment payment)
         {
-            //if (rental != null)
-            //{
-            //    var car = _carService.GetById(rental.CarId).Data;
-
-            //    var calculatedDate = (rental.ReturnDate - rental.RentDate).TotalDays;
-            //    decimal totalPrice = car.DailyPrice * Convert.ToDecimal(calculatedDate);
-
-            //    Payment payment = new Payment()
-            //    {
-            //        RentalId = 6008,
-            //        Amount = totalPrice,
-            //        CustomerId = rental.CustomerId,
-            //        PaymentDate = DateTime.Now
-            //    };
-
-            //    _paymentService.Add(payment);
-
-            //    return new SuccessResult();
-            //}
-
-            //return new ErrorResult(Messages.PaymentFailure);
             _paymentDal.Add(payment);
             return new SuccessResult(Messages.PaymentAdded);
         }
@@ -60,7 +38,6 @@ namespace Business.Concrete
             return new SuccessResult(Messages.PaymentDeleted);
         }
 
-        //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<List<Payment>> GetAll()
         {
@@ -71,7 +48,6 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Payment>>(_paymentDal.GetAll(), Messages.PaymentListed);
         }
 
-        //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<Payment> GetById(int paymentId)
         {

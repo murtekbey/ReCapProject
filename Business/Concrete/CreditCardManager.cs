@@ -22,7 +22,6 @@ namespace Business.Concrete
             _creditCardDal = creditCardDal;
         }
 
-        //[SecuredOperation("admin")]
         [ValidationAspect(typeof(CreditCardValidator))]
         [CacheRemoveAspect("ICreditCardService.Get")]
         public IResult Add(CreditCard creditCard)
@@ -31,7 +30,6 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CreditCardAdded);
         }
 
-        //[SecuredOperation("admin")]
         [CacheRemoveAspect("ICreditCardService.Get")]
         public IResult Delete(CreditCard creditCard)
         {
@@ -39,7 +37,6 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CreditCardDeleted);
         }
 
-        //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<List<CreditCard>> GetAll()
         {
@@ -50,7 +47,6 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CreditCard>>(_creditCardDal.GetAll(), Messages.CreditCardListed);
         }
 
-        //[SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<CreditCard> GetById(int creditCardId)
         {
@@ -61,18 +57,16 @@ namespace Business.Concrete
             return new SuccessDataResult<CreditCard>(_creditCardDal.Get(b => b.CreditCardId == creditCardId));
         }
 
-        //[SecuredOperation("user,admin")]
         [CacheAspect]
-        public IDataResult<CreditCard> GetByUserId(int userId)
+        public IDataResult<List<CreditCard>> GetByUserId(int userId)
         {
             if (DateTime.Now.Hour == 6)
             {
-                return new ErrorDataResult<CreditCard>(Messages.MaintenanceTime);
+                return new ErrorDataResult<List<CreditCard>>(Messages.MaintenanceTime);
             }
-            return new SuccessDataResult<CreditCard>(_creditCardDal.Get(b => b.UserId == userId));
+            return new SuccessDataResult<List<CreditCard>>(_creditCardDal.GetAll(b => b.UserId == userId));
         }
 
-        //[SecuredOperation("admin")]
         [ValidationAspect(typeof(CreditCardValidator))]
         [CacheRemoveAspect("ICreditCardService.Get")]
         public IResult Update(CreditCard creditCard)

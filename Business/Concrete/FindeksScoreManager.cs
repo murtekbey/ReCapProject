@@ -22,7 +22,6 @@ namespace Business.Concrete
             _findeksScoreDal = findeksScoreDal;
         }
 
-        //[SecuredOperation("admin")]
         [ValidationAspect(typeof(FindeksScoreValidator))]
         [CacheRemoveAspect("IFindeksScoreService.Get")]
         public IResult Add(FindeksScore findeksScore)
@@ -40,7 +39,6 @@ namespace Business.Concrete
             return new SuccessResult(Messages.FindeksScoreDeleted);
         }
 
-        [SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<List<FindeksScore>> GetAll()
         {
@@ -51,6 +49,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<FindeksScore>>(_findeksScoreDal.GetAll(), Messages.FindeksScoreListed);
         }
 
+        [CacheAspect]
         public IDataResult<FindeksScore> GetByCustomerId(int customerId)
         {
             var findeks = _findeksScoreDal.Get(f => f.CustomerId == customerId);
@@ -61,7 +60,6 @@ namespace Business.Concrete
             return new SuccessDataResult<FindeksScore>(findeks);
         }
 
-        [SecuredOperation("user,admin")]
         [CacheAspect]
         public IDataResult<FindeksScore> GetById(int findeksScoreId)
         {

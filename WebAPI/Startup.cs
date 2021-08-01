@@ -35,10 +35,10 @@ namespace WebAPI
                 options.AddPolicy(
                     name: MyAllowOrigins,
                     builder => {
-                    builder
-                        .AllowAnyOrigin()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
+                        builder
+                            .AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
                 });
             });
             var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();

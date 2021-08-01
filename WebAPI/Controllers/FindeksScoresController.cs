@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
+    [EnableCors("DefaultCorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]
     public class FindeksScoresController : ControllerBase

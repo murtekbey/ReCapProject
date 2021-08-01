@@ -1,10 +1,12 @@
 ﻿using Business.Abstract;
 using Entities.DTOs;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
+    [EnableCors("DefaultCorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]
     public class CarImagesController : ControllerBase

@@ -1,10 +1,12 @@
 ﻿using Business.Abstract;
 using Entities.DTOs;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
 namespace WebAPI.Controllers
 {
+    [EnableCors("DefaultCorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : Controller

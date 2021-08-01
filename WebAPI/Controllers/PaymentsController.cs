@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Cors;
 
 namespace WebAPI.Controllers
 {
-    [EnableCors("DefaultCorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]
     public class PaymentsController : ControllerBase

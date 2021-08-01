@@ -6,7 +6,6 @@ using System.Linq;
 
 namespace WebAPI.Controllers
 {
-    [EnableCors("DefaultCorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : Controller

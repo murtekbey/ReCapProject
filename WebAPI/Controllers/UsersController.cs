@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
-    [EnableCors("DefaultCorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase

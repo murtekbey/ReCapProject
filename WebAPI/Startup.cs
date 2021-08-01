@@ -11,6 +11,7 @@ using Core.Utilities.IoC;
 using Microsoft.AspNetCore.Http;
 using Core.Extensions;
 using Core.DependencyResolvers;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace WebAPI
 {
@@ -63,11 +64,16 @@ namespace WebAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
             app.ConfigureCustomExceptionMiddleware();
 
             app.UseCors(builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials());
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 

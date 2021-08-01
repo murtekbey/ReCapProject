@@ -31,7 +31,7 @@ namespace WebAPI
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowOrigin", builder => builder
-                .WithOrigins("https://localhost:44356").AllowAnyHeader().AllowAnyMethod().AllowCredentials())
+                .WithOrigins("https://localhost:5000;https://localhost:5001").AllowAnyHeader().AllowAnyMethod().AllowCredentials())
                 ;
             });
             var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
@@ -79,6 +79,7 @@ namespace WebAPI
 
             app.UseAuthorization();
 
+            app.UseDefaultFiles();
             app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>

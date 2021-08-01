@@ -44,7 +44,7 @@ CREATE TABLE Customers(
 CREATE TABLE [dbo].[Findeks] (
     [FindeksId]		INT IDENTITY (1, 1) NOT NULL,
     [CustomerId]	INT NOT NULL,
-    [Score] SMALLINT NOT NULL,
+    [Score] INT NOT NULL,
     PRIMARY KEY CLUSTERED ([FindeksId] ASC),
     FOREIGN KEY ([CustomerId]) REFERENCES [dbo].[Customers] ([CustomerId])
 );
@@ -66,7 +66,7 @@ CREATE TABLE [dbo].[Cars] (
     [ModelYear]   INT          NOT NULL,
     [DailyPrice]  DECIMAL (18) NOT NULL,
     [Description] NTEXT        NULL,
-	[FindeksScore] SMALLINT NOT NULL,
+	[FindeksScore] INT NOT NULL,
     PRIMARY KEY CLUSTERED ([CarId] ASC),
     FOREIGN KEY ([ColorId]) REFERENCES [dbo].[Colors] ([ColorId]),
     FOREIGN KEY ([BrandId]) REFERENCES [dbo].[Brands] ([BrandId])

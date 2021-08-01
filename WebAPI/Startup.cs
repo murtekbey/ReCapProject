@@ -24,15 +24,22 @@ namespace WebAPI
 
         public IConfiguration Configuration { get; }
 
+        readonly string MyAllowOrigins = "_myAllowOrigins";
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowOrigin", builder => builder
-                .WithOrigins("https://localhost:5000;https://localhost:5001").AllowAnyHeader().AllowAnyMethod().AllowCredentials())
-                ;
+                options.AddPolicy(
+                    name: MyAllowOrigins,
+                    builder => {
+                    builder
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                });
             });
             var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
@@ -71,7 +78,7 @@ namespace WebAPI
 
             app.ConfigureCustomExceptionMiddleware();
 
-            app.UseCors(builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials());
+            app.UseCors(MyAllowOrigins);
 
             app.UseRouting();
 

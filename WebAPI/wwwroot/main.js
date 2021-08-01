@@ -915,8 +915,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "environment", function() { return environment; });
 const environment = {
     production: false,
-    apiUrl: 'https://localhost:44356/api/',
-    baseUrl: 'https://localhost:44356/',
+    apiUrl: 'https://localhost:5000/api/',
+    baseUrl: 'https://localhost:5000/',
 };
 
 

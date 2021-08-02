@@ -11,6 +11,12 @@ CREATE TABLE [dbo].[Users] (
     PRIMARY KEY CLUSTERED ([UserId] ASC)
 );
 
+CREATE TABLE [dbo].[OperationClaims] (
+    [OperationClaimId] INT           IDENTITY (1, 1) NOT NULL,
+    [Name]             VARCHAR (250) NOT NULL,
+    PRIMARY KEY CLUSTERED ([OperationClaimId] ASC)
+);
+
 CREATE TABLE [dbo].[UserOperationClaims] (
     [UserOperationClaimId] INT IDENTITY (1, 1) NOT NULL,
     [UserId]               INT NOT NULL,
@@ -18,12 +24,6 @@ CREATE TABLE [dbo].[UserOperationClaims] (
     PRIMARY KEY CLUSTERED ([UserOperationClaimId] ASC),
     FOREIGN KEY ([OperationClaimId]) REFERENCES [dbo].[OperationClaims] ([OperationClaimId]),
     FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([UserId])
-);
-
-CREATE TABLE [dbo].[OperationClaims] (
-    [OperationClaimId] INT           IDENTITY (1, 1) NOT NULL,
-    [Name]             VARCHAR (250) NOT NULL,
-    PRIMARY KEY CLUSTERED ([OperationClaimId] ASC)
 );
 
 CREATE TABLE [dbo].[Brands] (

@@ -36,8 +36,20 @@ namespace WebAPI
                     name: MyAllowOrigins,
                     builder => {
                         builder
-                            .WithOrigins("192.168.56.102")
-                            .AllowAnyOrigin()
+                            .WithOrigins(
+                            "http://192.168.56.102",
+                            "https://192.168.56.102",
+                            "http://192.168.56.102:5000",
+                            "https://192.168.56.102:5000",
+                            "http://192.168.56.102:5001",
+                            "https://192.168.56.102:5001",
+                            "http://localhost",
+                            "https://localhost",
+                            "http://localhost:5000",
+                            "https://localhost:5000",
+                            "http://localhost:5001",
+                            "https://localhost:5001"
+                            )
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                 });

@@ -25,6 +25,9 @@ namespace Business.Concrete
         [CacheRemoveAspect("ICustomerService.Get")]
         public IResult Add(Customer customer)
         {
+            if (GetByCompanyName(customer.CompanyName).Data != null) {
+                return new ErrorResult(Messages.CompanyNameInvalid);
+            }
             _customerDal.Add(customer);
             return new SuccessResult(Messages.CustomerAdded);
         }

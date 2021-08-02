@@ -48,7 +48,9 @@ namespace WebAPI
                             "http://localhost:5000",
                             "https://localhost:5000",
                             "http://localhost:5001",
-                            "https://localhost:5001"
+                            "https://localhost:5001",
+                            "https://localhost:4200",
+                            "https://localhost:44356"
                             )
                             .AllowAnyHeader()
                             .AllowAnyMethod();
@@ -92,6 +94,7 @@ namespace WebAPI
             app.ConfigureCustomExceptionMiddleware();
 
             app.UseCors(MyAllowOrigins);
+            //app.UseCors(builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials());
 
             app.UseRouting();
 

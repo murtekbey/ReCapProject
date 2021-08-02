@@ -7,7 +7,6 @@ using Core.Utilities.Interceptors;
 using Core.Utilities.Security.JWT;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
-using Entities.Concrete;
 
 namespace Business.DependecyResolvers.Autofac
 {
@@ -39,17 +38,17 @@ namespace Business.DependecyResolvers.Autofac
             builder.RegisterType<UserManager>().As<IUserService>().SingleInstance();
             builder.RegisterType<EfUserDal>().As<IUserDal>().SingleInstance();
 
-            builder.RegisterType<AuthManager>().As<IAuthService>();
-            builder.RegisterType<JwtHelper>().As<ITokenHelper>();
+            builder.RegisterType<AuthManager>().As<IAuthService>().SingleInstance();
+            builder.RegisterType<JwtHelper>().As<ITokenHelper>().SingleInstance();
 
-            builder.RegisterType<PaymentManager>().As<IPaymentService>();
-            builder.RegisterType<EfPaymentDal>().As<IPaymentDal>();
+            builder.RegisterType<PaymentManager>().As<IPaymentService>().SingleInstance();
+            builder.RegisterType<EfPaymentDal>().As<IPaymentDal>().SingleInstance();
 
-            builder.RegisterType<CreditCardManager>().As<ICreditCardService>();
-            builder.RegisterType<EfCreditCardDal>().As<ICreditCardDal>();
+            builder.RegisterType<CreditCardManager>().As<ICreditCardService>().SingleInstance();
+            builder.RegisterType<EfCreditCardDal>().As<ICreditCardDal>().SingleInstance();
 
-            builder.RegisterType<FindeksScoreManager>().As<IFindeksScoreService>();
-            builder.RegisterType<EfFindeksScoreDal>().As<IFindeksScoreDal>();
+            builder.RegisterType<FindeksScoreManager>().As<IFindeksScoreService>().SingleInstance();
+            builder.RegisterType<EfFindeksScoreDal>().As<IFindeksScoreDal>().SingleInstance();
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()

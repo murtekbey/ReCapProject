@@ -36,6 +36,7 @@ namespace WebAPI
                     name: MyAllowOrigins,
                     builder => {
                         builder
+                            .WithOrigins("192.168.56.102")
                             .AllowAnyOrigin()
                             .AllowAnyHeader()
                             .AllowAnyMethod();
